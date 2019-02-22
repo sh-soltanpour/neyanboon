@@ -24,9 +24,9 @@ public class UserController extends BaseController implements HttpHandler {
         String userId = tokens.get(2);
         try {
             String response = userHtmlTemplate(userService.getUser(userId));
-            writeHtmlOutput(httpExchange, response, 200);
+            writeHtmlOutput(httpExchange, response, HttpStatus.OK.getCode());
         } catch (NotFoundException e) {
-            writeHtmlOutput(httpExchange, "<h1>User not found</h1>", 404);
+            writeHtmlOutput(httpExchange, "<h1>User not found</h1>", HttpStatus.NOTFOUND.getCode());
         }
     }
 

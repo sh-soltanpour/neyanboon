@@ -9,6 +9,7 @@ import exceptions.AccessDeniedException;
 import exceptions.NotFoundException;
 import services.project.ProjectService;
 import services.user.UserService;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -24,24 +25,22 @@ public class ProjectController extends BaseController implements HttpHandler {
         List<String> tokens = Arrays.asList(httpExchange.getRequestURI().getPath().split("/"));
 
         if (tokens.size() == 2) {
-            getProjectsList(httpExchange, tokens);
+            getProjectsList(httpExchange);
         }
         if (tokens.size() == 3) {
             getProjectDetails(httpExchange, tokens);
         }
     }
 
-    private void getProjectDetails(HttpExchange httpExchange, List<String> tokens) throws JsonProcessingException {
+    private void getProjectDetails(HttpExchange httpExchange, List<String> tokens) {
         String projectId = tokens.get(2);
         try {
-            ProjectDto project = projectService.getProject(userService.getCurrentUser(),projectId);
-            writeHtmlOutput(httpExchange, projectHtmlTemplate(project), 200);
-        }
-        catch (NotFoundException e){
-            writeHtmlOutput(httpExchange,"<h1>Project Not Found</h1>", 404);
-        }
-        catch (AccessDeniedException e){
-            writeHtmlOutput(httpExchange,"<h1>Access Denied</h1>", 403);
+            ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
+            writeHtmlOutput(httpExchange, projectHtmlTemplate(project), HttpStatus.OK.getCode());
+        } catch (NotFoundException e) {
+            writeHtmlOutput(httpExchange, "<h1>Project Not Found</h1>", HttpStatus.NOTFOUND.getCode());
+        } catch (AccessDeniedException e) {
+            writeHtmlOutput(httpExchange, "<h1>Access Denied</h1>", HttpStatus.ACCESSDENIED.getCode());
         }
     }
 
@@ -55,7 +54,7 @@ public class ProjectController extends BaseController implements HttpHandler {
                 "    </ul> <hr/>", project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget());
     }
 
-    private void getProjectsList(HttpExchange httpExchange, List<String> tokenizer) {
+    private void getProjectsList(HttpExchange httpExchange) {
         List<ProjectDto> projects = projectService.getQualifiedProjects(userService.getCurrentUser());
         String response = projects.stream().map(this::projectHtmlTemplate).collect(Collectors.joining());
         writeHtmlOutput(httpExchange, response, 200);
