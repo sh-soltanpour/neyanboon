@@ -1,13 +1,17 @@
 package services.user;
 
+import dtos.UserDto;
 import entitites.Skill;
 import entitites.User;
+import exceptions.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
     private User currentUser;
+    private List<User> users = new ArrayList<>();
 
     @Override
     public void initialize() {
@@ -24,12 +28,23 @@ public class UserServiceImpl implements UserService {
                 "برنامەنویس وب",
                 null,
                 skills,
-                "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلیکارا بکنه ولی پول نداشت"
+                "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );
+        users.add(currentUser);
     }
 
     @Override
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    @Override
+    public UserDto getUser(String userId) throws NotFoundException {
+        return UserDto.of(users
+                .stream()
+                .filter(user -> user.getId().equals(userId))
+                .findFirst()
+                .orElseThrow(NotFoundException::new)
+        );
     }
 }

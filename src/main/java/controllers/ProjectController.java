@@ -9,15 +9,12 @@ import exceptions.AccessDeniedException;
 import exceptions.NotFoundException;
 import services.project.ProjectService;
 import services.user.UserService;
-
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProjectController implements HttpHandler {
+public class ProjectController extends BaseController implements HttpHandler {
     private ProjectService projectService = ObjectFactory.getProjectService();
     private UserService userService = ObjectFactory.getUserService();
 
@@ -64,17 +61,4 @@ public class ProjectController implements HttpHandler {
         writeHtmlOutput(httpExchange, response, 200);
     }
 
-    private void writeHtmlOutput(HttpExchange httpExchange, String response, int statusCode) {
-        try {
-            String outputString = "<!DOCTYPE html> <html dir='ltr' lang=\"fa\"> <head> <meta charset=\"UTF-8\"> <title>Project</title> </head> <body>";
-            outputString += response;
-            outputString += "</body> </html>";
-            httpExchange.sendResponseHeaders(statusCode, outputString.getBytes(StandardCharsets.UTF_8).length);
-            OutputStream os = httpExchange.getResponseBody();
-            os.write(outputString.getBytes());
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
