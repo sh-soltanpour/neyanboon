@@ -30,11 +30,7 @@ public class ProjectController implements HttpHandler {
     private void getProjectDetails(HttpExchange httpExchange, List<String> tokens) throws JsonProcessingException {
         String projectId = tokens.get(2);
         ProjectDto project = ObjectFactory.getProjectService().getProject(projectId);
-        try {
-            writeHtmlOutput(httpExchange, projectHtmlTemplate(project), 200);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        writeHtmlOutput(httpExchange, projectHtmlTemplate(project), 200);
     }
 
     private String projectHtmlTemplate(ProjectDto project) {
@@ -42,21 +38,25 @@ public class ProjectController implements HttpHandler {
                 "        <li>id: %s </li>\n" +
                 "        <li>title: %s</li>\n" +
                 "        <li>description: %s</li>\n" +
-                "        <li>imageUrl: <img src=\"%s\" style=\"width: 50px; height: 50px;\"></li>\n" +
+                "        <li>imageUrl: <img src=\"%s\" style=\"width: 100px; height: 100px;\"></li>\n" +
                 "        <li>budget: %s</li>\n" +
-                "    </ul>", project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget());
+                "    </ul> <hr/>", project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget());
     }
 
     private void getProjectsList(HttpExchange httpExchange, List<String> tokenizer) {
     }
 
-    private void writeHtmlOutput(HttpExchange httpExchange, String response, int statusCode) throws Exception {
-        String outputString = "<!DOCTYPE html> <html dir='ltr' lang=\"fa\"> <head> <meta charset=\"UTF-8\"> <title>Project</title> </head> <body>";
-        outputString += response;
-        outputString += "</body> </html>";
-        httpExchange.sendResponseHeaders(statusCode, outputString.getBytes(StandardCharsets.UTF_8).length);
-        OutputStream os = httpExchange.getResponseBody();
-        os.write(outputString.getBytes());
-        os.close();
+    private void writeHtmlOutput(HttpExchange httpExchange, String response, int statusCode) {
+        try {
+            String outputString = "<!DOCTYPE html> <html dir='ltr' lang=\"fa\"> <head> <meta charset=\"UTF-8\"> <title>Project</title> </head> <body>";
+            outputString += response;
+            outputString += "</body> </html>";
+            httpExchange.sendResponseHeaders(statusCode, outputString.getBytes(StandardCharsets.UTF_8).length);
+            OutputStream os = httpExchange.getResponseBody();
+            os.write(outputString.getBytes());
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
