@@ -18,14 +18,7 @@ public class ProjectDto {
 
     public ProjectDto() {
     }
-
-    public Project toProject() {
-        return new Project(
-                title,
-                skills.stream().map(SkillDto::toSkill).collect(Collectors.toList()),
-                (int) budget
-        );
-    }
+    
 
     public String getTitle() {
         return title;

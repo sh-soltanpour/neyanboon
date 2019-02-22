@@ -5,7 +5,7 @@ import dtos.ProjectDto;
 import java.util.List;
 
 public interface ProjectService {
-    void fetchProjects();
+    void initialFetch();
     List<ProjectDto> getProjects();
     ProjectDto getProject(String projectId);
 }

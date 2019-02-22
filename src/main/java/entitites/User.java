@@ -10,20 +10,17 @@ public class User {
     private String jobTitle;
     private String profilePictureUrl;
     private String bio;
-    private String username;
     private List<Skill> skills = new ArrayList<>();
 
-    public User(String username, List<Skill> skills) {
-        this.username = username;
+
+    public User(String id, String firstName, String lastName, String jobTitle, String profilePictureUrl, List<Skill> skills, String bio) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.jobTitle = jobTitle;
+        this.profilePictureUrl = profilePictureUrl;
+        this.bio = bio;
         this.skills = skills;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public List<Skill> getSkills() {

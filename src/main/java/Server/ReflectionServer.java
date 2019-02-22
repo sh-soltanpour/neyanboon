@@ -14,7 +14,9 @@ public class ReflectionServer {
         server.setExecutor(null);
         server.start();
     }
-    public void initialize(){
-        ObjectFactory.getProjectService().fetchProjects();
+
+    private void initialize() {
+        ObjectFactory.getProjectService().initialFetch();
+        ObjectFactory.getUserService().initialize();
     }
 }

@@ -2,10 +2,10 @@ package controllers;
 
 import Factory.ObjectFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dtos.ProjectDto;
+import services.project.ProjectService;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ProjectController implements HttpHandler {
+    private ProjectService projectService = ObjectFactory.getProjectService();
+
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
 
@@ -29,7 +31,7 @@ public class ProjectController implements HttpHandler {
 
     private void getProjectDetails(HttpExchange httpExchange, List<String> tokens) throws JsonProcessingException {
         String projectId = tokens.get(2);
-        ProjectDto project = ObjectFactory.getProjectService().getProject(projectId);
+        ProjectDto project = projectService.getProject(projectId);
         writeHtmlOutput(httpExchange, projectHtmlTemplate(project), 200);
     }
 

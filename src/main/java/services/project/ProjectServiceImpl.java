@@ -3,6 +3,7 @@ package services.project;
 import Factory.ObjectFactory;
 import client.MetaDataClient;
 import dtos.ProjectDto;
+import dtos.SkillDto;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -13,18 +14,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     private MetaDataClient metaDataClient = ObjectFactory.getMetaDataClient();
     private HashMap<String, ProjectDto> projects;
+    private List<SkillDto> skills;
 
 
     @Override
-    public void fetchProjects() {
-        List<ProjectDto> fetchedProjects = metaDataClient.getProjects();
+    public void initialFetch() {
         projects = new HashMap<>
                 (
-                        fetchedProjects
+                        metaDataClient
+                                .getProjects()
                                 .stream()
-                                .collect(
-                                        Collectors.toMap(ProjectDto::getId, project -> project))
+                                .collect(Collectors.toMap(ProjectDto::getId, project -> project))
                 );
+        skills = metaDataClient.getSkills();
     }
 
     @Override
