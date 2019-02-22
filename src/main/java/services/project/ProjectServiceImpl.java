@@ -7,6 +7,8 @@ import dtos.SkillDto;
 import entitites.Project;
 import entitites.Skill;
 import entitites.User;
+import exceptions.AccessDeniedException;
+import exceptions.NotFoundException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -41,6 +43,16 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDto getProject(String projectId) {
         return ProjectDto.of(projects.get(projectId));
+    }
+
+    @Override
+    public ProjectDto getProject(User user, String projectId) throws NotFoundException, AccessDeniedException {
+        Project project = projects.get(projectId);
+        if (project == null)
+            throw new NotFoundException();
+        else if (!isQualified(user, project))
+            throw new AccessDeniedException();
+        return ProjectDto.of(project);
     }
 
     @Override

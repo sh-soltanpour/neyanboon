@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dtos.ProjectDto;
+import exceptions.AccessDeniedException;
+import exceptions.NotFoundException;
 import services.project.ProjectService;
 import services.user.UserService;
 
@@ -34,8 +36,16 @@ public class ProjectController implements HttpHandler {
 
     private void getProjectDetails(HttpExchange httpExchange, List<String> tokens) throws JsonProcessingException {
         String projectId = tokens.get(2);
-        ProjectDto project = projectService.getProject(projectId);
-        writeHtmlOutput(httpExchange, projectHtmlTemplate(project), 200);
+        try {
+            ProjectDto project = projectService.getProject(userService.getCurrentUser(),projectId);
+            writeHtmlOutput(httpExchange, projectHtmlTemplate(project), 200);
+        }
+        catch (NotFoundException e){
+            writeHtmlOutput(httpExchange,"<h1>Project Not Found</h1>", 404);
+        }
+        catch (AccessDeniedException e){
+            writeHtmlOutput(httpExchange,"<h1>Access Denied</h1>", 403);
+        }
     }
 
     private String projectHtmlTemplate(ProjectDto project) {
