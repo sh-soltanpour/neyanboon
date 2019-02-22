@@ -29,10 +29,10 @@ public class UserDto {
         this.skills = skills;
     }
 
-    public User toUser() {
-        return new User(
-                username,
-                skills.stream().map(SkillDto::toSkill).collect(Collectors.toList())
-        );
-    }
+//    public User toUser() {
+//        return new User(
+//                username,
+//                skills.stream().map(SkillDto::toSkill).collect(Collectors.toList())
+//        );
+//    }
 }

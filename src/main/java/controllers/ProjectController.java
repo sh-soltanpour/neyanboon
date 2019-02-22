@@ -6,15 +6,18 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dtos.ProjectDto;
 import services.project.ProjectService;
+import services.user.UserService;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProjectController implements HttpHandler {
     private ProjectService projectService = ObjectFactory.getProjectService();
+    private UserService userService = ObjectFactory.getUserService();
 
     @Override
     public void handle(HttpExchange httpExchange) throws IOException {
@@ -40,12 +43,15 @@ public class ProjectController implements HttpHandler {
                 "        <li>id: %s </li>\n" +
                 "        <li>title: %s</li>\n" +
                 "        <li>description: %s</li>\n" +
-                "        <li>imageUrl: <img src=\"%s\" style=\"width: 100px; height: 100px;\"></li>\n" +
+                "        <li>image: <img src=\"%s\" style=\"width: 100px; height: 100px;\"></li>\n" +
                 "        <li>budget: %s</li>\n" +
                 "    </ul> <hr/>", project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(), project.getBudget());
     }
 
     private void getProjectsList(HttpExchange httpExchange, List<String> tokenizer) {
+        List<ProjectDto> projects = projectService.getQualifiedProjects(userService.getCurrentUser());
+        String response = projects.stream().map(this::projectHtmlTemplate).collect(Collectors.joining());
+        writeHtmlOutput(httpExchange, response, 200);
     }
 
     private void writeHtmlOutput(HttpExchange httpExchange, String response, int statusCode) {

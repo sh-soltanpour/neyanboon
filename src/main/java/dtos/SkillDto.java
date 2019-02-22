@@ -10,6 +10,15 @@ public class SkillDto {
     public SkillDto() {
     }
 
+    public SkillDto(String name, int point) {
+        this.name = name;
+        this.point = point;
+    }
+
+    public static SkillDto of(Skill skill) {
+        return new SkillDto(skill.getName(), skill.getPoints());
+    }
+
     public String getName() {
         return name;
     }
