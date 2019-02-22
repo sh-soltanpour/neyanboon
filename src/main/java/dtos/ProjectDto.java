@@ -10,7 +10,7 @@ public class ProjectDto {
     private String id;
     private String title;
     private List<SkillDto> skills;
-    private long budget;
+    private int budget;
     private Date deadline;
     private String imageUrl;
     private String description;
@@ -43,11 +43,11 @@ public class ProjectDto {
         this.skills = skills;
     }
 
-    public long getBudget() {
+    public int getBudget() {
         return budget;
     }
 
-    public void setBudget(long budget) {
+    public void setBudget(int budget) {
         this.budget = budget;
     }
 

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String jobTitle;
+    private String profilePictureUrl;
+    private String bio;
     private String username;
     private List<Skill> skills = new ArrayList<>();
 
@@ -36,5 +42,53 @@ public class User {
         if (foundSkill == null)
             return 0;
         return foundSkill.getPoints();
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getJobTitle() {
+        return jobTitle;
+    }
+
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
+    }
+
+    public String getProfilePictureUrl() {
+        return profilePictureUrl;
+    }
+
+    public void setProfilePictureUrl(String profilePictureUrl) {
+        this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 }
