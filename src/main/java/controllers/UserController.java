@@ -2,7 +2,6 @@ package controllers;
 
 import Factory.ObjectFactory;
 import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import dtos.UserDto;
 import exceptions.NotFoundException;
 import services.user.UserService;
@@ -11,7 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class UserController extends BaseController implements HttpHandler {
+public class UserController extends BaseController {
     private UserService userService = ObjectFactory.getUserService();
 
     @Override

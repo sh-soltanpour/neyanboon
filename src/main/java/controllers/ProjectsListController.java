@@ -3,30 +3,21 @@ package controllers;
 import Factory.ObjectFactory;
 import com.sun.net.httpserver.HttpExchange;
 import dtos.ProjectDto;
-import exceptions.AccessDeniedException;
-import exceptions.NotFoundException;
 import services.project.ProjectService;
 import services.user.UserService;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class ProjectController extends BaseController {
+public class ProjectsListController extends BaseController  {
     private ProjectService projectService = ObjectFactory.getProjectService();
     private UserService userService = ObjectFactory.getUserService();
 
     @Override
     public void handle(HttpExchange httpExchange) {
-        List<String> tokens = Arrays.asList(httpExchange.getRequestURI().getPath().split("/"));
-        String projectId = tokens.get(2);
-        try {
-            ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
-            writeHtmlOutput(httpExchange, projectHtmlTemplate(project), HttpStatus.OK.getCode());
-        } catch (NotFoundException e) {
-            writeHtmlOutput(httpExchange, "<h1>Project Not Found</h1>", HttpStatus.NOTFOUND.getCode());
-        } catch (AccessDeniedException e) {
-            writeHtmlOutput(httpExchange, "<h1>Access Denied</h1>", HttpStatus.ACCESSDENIED.getCode());
-        }
+        List<ProjectDto> projects = projectService.getQualifiedProjects(userService.getCurrentUser());
+        String response = projects.stream().map(this::projectHtmlTemplate).collect(Collectors.joining());
+        writeHtmlOutput(httpExchange, response, 200);
     }
 
     private String projectHtmlTemplate(ProjectDto project) {

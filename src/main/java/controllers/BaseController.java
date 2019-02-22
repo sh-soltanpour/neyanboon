@@ -1,12 +1,13 @@
 package controllers;
 
 import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-abstract class BaseController {
+abstract class BaseController implements HttpHandler {
     enum HttpStatus {
         OK(200), NOTFOUND(404), ACCESSDENIED(403);
 
