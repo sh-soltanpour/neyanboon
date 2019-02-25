@@ -8,12 +8,13 @@ import exceptions.NotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
     private User currentUser;
     private List<User> users = new ArrayList<>();
 
-    public UserServiceImpl(){
+    public UserServiceImpl() {
         initialize();
     }
 
@@ -50,5 +51,14 @@ public class UserServiceImpl implements UserService {
                 .findFirst()
                 .orElseThrow(NotFoundException::new)
         );
+    }
+
+    @Override
+    public List<UserDto> getOtherUsers() {
+        return users
+                .stream()
+                .filter(user -> !user.getId().equals(currentUser.getId()))
+                .map(UserDto::of)
+                .collect(Collectors.toList());
     }
 }
