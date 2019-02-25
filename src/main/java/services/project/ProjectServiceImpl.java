@@ -21,6 +21,9 @@ public class ProjectServiceImpl implements ProjectService {
     private HashMap<String, Project> projects;
     private List<SkillDto> skills;
 
+    public ProjectServiceImpl() {
+        initialFetch();
+    }
 
     @Override
     public void initialFetch() {

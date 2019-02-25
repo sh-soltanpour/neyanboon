@@ -13,6 +13,10 @@ public class UserServiceImpl implements UserService {
     private User currentUser;
     private List<User> users = new ArrayList<>();
 
+    public UserServiceImpl(){
+        initialize();
+    }
+
     @Override
     public void initialize() {
         List<Skill> skills = Arrays.asList(
