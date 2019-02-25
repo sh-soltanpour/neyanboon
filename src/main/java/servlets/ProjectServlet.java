@@ -32,10 +32,14 @@ public class ProjectServlet extends HttpServlet {
             req.getRequestDispatcher("/projects.jsp").forward(req, resp);
 
         } catch (AccessDeniedException e) {
-            System.out.println("exception denied");
+            req.setAttribute("message", "Access Denied");
+            resp.setStatus(403);
+            req.getRequestDispatcher("/error.jsp").forward(req, resp);
 
         } catch (NotFoundException e) {
-            System.out.println("exception not found");
+            req.setAttribute("message", "Project not found");
+            resp.setStatus(404);
+            req.getRequestDispatcher("/error.jsp").forward(req, resp);
         }
 
     }
