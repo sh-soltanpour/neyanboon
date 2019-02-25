@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @WebServlet("/project/*")
@@ -27,8 +28,8 @@ public class ProjectServlet extends HttpServlet {
         String projectId = pathVariables.get(1);
         try {
             ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
-            req.setAttribute("project", project);
-            req.getRequestDispatcher("/project.jsp").forward(req, resp);
+            req.setAttribute("projects", Collections.singletonList(project));
+            req.getRequestDispatcher("/projects.jsp").forward(req, resp);
 
         } catch (AccessDeniedException e) {
             System.out.println("exception denied");
