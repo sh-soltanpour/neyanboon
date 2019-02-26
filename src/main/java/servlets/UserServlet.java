@@ -1,6 +1,6 @@
 package servlets;
 
-import Factory.ObjectFactory;
+import factory.ObjectFactory;
 import dtos.UserDto;
 import exceptions.NotFoundException;
 import services.user.UserService;

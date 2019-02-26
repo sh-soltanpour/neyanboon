@@ -1,4 +1,4 @@
-package Factory;
+package factory;
 
 import client.MetaDataClient;
 import feign.Feign;

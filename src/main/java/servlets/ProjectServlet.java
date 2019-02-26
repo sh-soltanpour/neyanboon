@@ -1,6 +1,6 @@
 package servlets;
 
-import Factory.ObjectFactory;
+import factory.ObjectFactory;
 import dtos.ProjectDto;
 import exceptions.AccessDeniedException;
 import exceptions.NotFoundException;

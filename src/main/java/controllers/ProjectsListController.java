@@ -1,6 +1,6 @@
 package controllers;
 
-import Factory.ObjectFactory;
+import factory.ObjectFactory;
 import com.sun.net.httpserver.HttpExchange;
 import dtos.ProjectDto;
 import services.project.ProjectService;

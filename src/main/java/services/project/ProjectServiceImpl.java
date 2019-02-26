@@ -1,6 +1,6 @@
 package services.project;
 
-import Factory.ObjectFactory;
+import factory.ObjectFactory;
 import client.MetaDataClient;
 import dtos.ProjectDto;
 import dtos.SkillDto;
