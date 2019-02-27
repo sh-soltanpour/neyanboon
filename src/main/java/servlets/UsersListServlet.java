@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/user")
-public class UsersListServlet extends HttpServlet {
+public class UsersListServlet extends BaseServlet {
     private UserService userService = ObjectFactory.getUserService();
 
     @Override

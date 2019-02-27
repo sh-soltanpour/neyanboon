@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @WebServlet("/project")
-public class ProjectListServlet extends HttpServlet {
+public class ProjectListServlet extends BaseServlet {
     private ProjectService projectService = ObjectFactory.getProjectService();
     private UserService userService = ObjectFactory.getUserService();
 

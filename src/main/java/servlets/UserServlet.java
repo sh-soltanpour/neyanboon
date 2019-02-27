@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 @WebServlet("/user/*")
-public class UserServlet extends HttpServlet {
+public class UserServlet extends BaseServlet {
     private UserService userService = ObjectFactory.getUserService();
 
     @Override

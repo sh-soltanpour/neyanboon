@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 @WebServlet("/project/*")
-public class ProjectServlet extends HttpServlet {
+public class ProjectServlet extends BaseServlet {
     private ProjectService projectService = ObjectFactory.getProjectService();
     private UserService userService = ObjectFactory.getUserService();
 
