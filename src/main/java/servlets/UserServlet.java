@@ -24,7 +24,7 @@ public class UserServlet extends HttpServlet {
         List<String> pathVariables = Arrays.asList(req.getPathInfo().split("/"));
         String userId = pathVariables.get(1);
         try {
-            UserDto user = userService.getUser(userId);
+            UserDto user = userService.getUserDto(userId);
             req.setAttribute("users", Collections.singletonList(user));
             req.getRequestDispatcher("/users.jsp").forward(req, resp);
         } catch (NotFoundException e) {

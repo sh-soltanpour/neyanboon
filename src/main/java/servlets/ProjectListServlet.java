@@ -1,5 +1,6 @@
 package servlets;
 
+import entitites.User;
 import factory.ObjectFactory;
 import dtos.ProjectDto;
 import services.project.ProjectService;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @WebServlet("/project")
@@ -20,8 +22,14 @@ public class ProjectListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<ProjectDto> projects = projectService.getQualifiedProjects(userService.getCurrentUser());
+        User user = userService.getCurrentUser();
+        List<ProjectDto> projects = projectService.getQualifiedProjects(user);
+        HashMap<String, Boolean> bidRequested = new HashMap<>();
+        for (ProjectDto project : projects) {
+            bidRequested.put(project.getId(), projectService.bidRequested(user.getId(), project.getId()));
+        }
         req.setAttribute("projects", projects);
+        req.setAttribute("bidRequested", bidRequested);
         req.getRequestDispatcher("/projects.jsp").forward(req, resp);
     }
 }

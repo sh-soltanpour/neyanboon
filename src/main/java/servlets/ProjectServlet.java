@@ -29,6 +29,8 @@ public class ProjectServlet extends HttpServlet {
         try {
             ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
             req.setAttribute("projects", Collections.singletonList(project));
+            boolean bidRequested = projectService.bidRequested(userService.getCurrentUser().getId(), projectId);
+            req.setAttribute("bidRequested", Collections.singletonMap(project.getId(), bidRequested));
             req.getRequestDispatcher("/projects.jsp").forward(req, resp);
 
         } catch (AccessDeniedException e) {

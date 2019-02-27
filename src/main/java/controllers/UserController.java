@@ -22,7 +22,7 @@ public class UserController extends BaseController {
     private void showUser(HttpExchange httpExchange, List<String> tokens) {
         String userId = tokens.get(2);
         try {
-            String response = userHtmlTemplate(userService.getUser(userId));
+            String response = userHtmlTemplate(userService.getUserDto(userId));
             writeHtmlOutput(httpExchange, response, HttpStatus.OK.getCode());
         } catch (NotFoundException e) {
             writeHtmlOutput(httpExchange, "<h1>User not found</h1>", HttpStatus.NOTFOUND.getCode());

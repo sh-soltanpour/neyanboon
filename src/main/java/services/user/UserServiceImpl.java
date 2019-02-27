@@ -44,13 +44,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUser(String userId) throws NotFoundException {
-        return UserDto.of(users
+    public User getUser(String userId) throws NotFoundException {
+        return users
                 .stream()
                 .filter(user -> user.getId().equals(userId))
                 .findFirst()
-                .orElseThrow(NotFoundException::new)
-        );
+                .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public UserDto getUserDto(String userId) throws NotFoundException {
+        return UserDto.of(getUser(userId));
     }
 
     @Override

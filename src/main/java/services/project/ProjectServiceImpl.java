@@ -1,15 +1,19 @@
 package services.project;
 
-import factory.ObjectFactory;
 import client.MetaDataClient;
 import dtos.ProjectDto;
 import dtos.SkillDto;
+import entitites.Bid;
 import entitites.Project;
 import entitites.Skill;
 import entitites.User;
 import exceptions.AccessDeniedException;
+import exceptions.AlreadyExistsException;
 import exceptions.NotFoundException;
+import factory.ObjectFactory;
+import services.user.UserService;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +24,8 @@ public class ProjectServiceImpl implements ProjectService {
     private MetaDataClient metaDataClient = ObjectFactory.getMetaDataClient();
     private HashMap<String, Project> projects;
     private List<SkillDto> skills;
+    private List<Bid> bids = new ArrayList<>();
+    private UserService userService = ObjectFactory.getUserService();
 
     public ProjectServiceImpl() {
         initialFetch();
@@ -68,7 +74,48 @@ public class ProjectServiceImpl implements ProjectService {
                 .collect(Collectors.toList());
     }
 
-    public boolean isQualified(User user, Project project) {
+    @Override
+    public void addBidRequest(String projectId, User user, int amount)
+            throws NotFoundException, AccessDeniedException, AlreadyExistsException {
+        Project project = projects.get(projectId);
+        if (project == null)
+            throw new NotFoundException();
+        if (!isQualified(user, project))
+            throw new AccessDeniedException();
+        if (findBid(user, project) != null)
+            throw new AlreadyExistsException("bid already exists");
+        Bid bid = new Bid(user, project, amount);
+        bids.add(bid);
+    }
+
+    @Override
+    public boolean bidRequested(String userId, String projectId) {
+        User user;
+        try {
+            user = userService.getUser(userId);
+        } catch (NotFoundException e) {
+            user = null;
+        }
+        Project project = projects.get(projectId);
+        if (project == null || user == null)
+            return false;
+        return findBid(user, project) != null;
+    }
+
+
+    private Bid findBid(User user, Project project) {
+        return bids
+                .stream()
+                .filter
+                        (bid ->
+                                bid.getBiddingUser().getId().equals(user.getId()) &&
+                                        bid.getProject().getId().equals(project.getId())
+                        )
+                .findFirst()
+                .orElse(null);
+    }
+
+    private boolean isQualified(User user, Project project) {
         for (Skill requiredSkill : project.getSkills()) {
             Skill userSkill = user
                     .getSkills()

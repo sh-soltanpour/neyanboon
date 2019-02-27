@@ -10,6 +10,7 @@ public interface UserService {
     void initialize();
     User getCurrentUser();
 
-    UserDto getUser(String userId) throws NotFoundException;
+    User getUser(String userId) throws NotFoundException;
+    UserDto getUserDto(String userId) throws NotFoundException;
     List<UserDto> getOtherUsers();
 }
