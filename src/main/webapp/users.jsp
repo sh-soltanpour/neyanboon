@@ -14,6 +14,14 @@
         <li>last name: ${user.lastName}</li>
         <li>jobTitle: ${user.jobTitle}</li>
         <li>bio: ${user.bio}</li>
+        <li>
+            skills:
+            <ul>
+                <c:forEach var="skill" items="${user.skills}">
+                    <li>${skill.name} : ${skill.point}</li>
+                </c:forEach>
+            </ul>
+        </li>
     </ul>
     <hr/>
 </c:forEach>
