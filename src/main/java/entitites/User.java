@@ -29,16 +29,17 @@ public class User {
     }
 
 
-    private boolean hasSkill(Skill newSkill) {
+    private boolean hasSkill(String skillName) {
         return skills
                 .stream()
-                .anyMatch(skill -> skill.getName().equals(newSkill.getName()));
+                .anyMatch(skill -> skill.getName().equals(skillName));
     }
 
-    public void addSkill(Skill newSkill) {
-        if (hasSkill(newSkill))
+    public void addSkill(String skillName) {
+        if (hasSkill(skillName))
             return;
-        skills.add(newSkill);
+
+        skills.add(new Skill(skillName));
     }
 
     public void setSkills(List<Skill> skills) {
@@ -105,5 +106,13 @@ public class User {
 
     public void deleteSkill(String skillName) {
         skills.removeIf(skill -> skill.getName().equals(skillName));
+    }
+
+    public void endorse(User endorser, String skillName) {
+        skills
+                .stream()
+                .filter(skill -> skill.getName().equals(skillName))
+                .findFirst()
+                .ifPresent(foundSkill -> foundSkill.endorse(endorser));
     }
 }

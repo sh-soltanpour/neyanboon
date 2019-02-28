@@ -1,12 +1,28 @@
 package entitites;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Skill {
     private String name;
     private int point;
+    private List<User> endorsedBy;
 
-    public Skill(String name, int point) {
+
+    public Skill(String name) {
         this.name = name;
         this.point = point;
+        this.endorsedBy = new ArrayList<>();
+    }
+
+    public void endorse(User endorser) {
+        if (endorsedBy.stream().anyMatch(user -> user.getId().equals(endorser.getId())))
+            return;
+        endorsedBy.add(endorser);
+    }
+
+    public boolean hasEndorsedBy(User endroser) {
+        return endorsedBy.stream().anyMatch(user -> user.getId().equals(endroser.getId()));
     }
 
     public String getName() {
@@ -18,10 +34,12 @@ public class Skill {
     }
 
     public int getPoints() {
-        return point;
+        return endorsedBy.size();
     }
 
     public void setPoints(int point) {
         this.point = point;
     }
+
+
 }

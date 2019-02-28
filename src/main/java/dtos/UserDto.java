@@ -42,6 +42,17 @@ public class UserDto {
         );
     }
 
+    public User toUser() {
+        return new User(
+                id,
+                firstName,
+                lastName,
+                jobTitle,
+                profilePictureUrl,
+                skills.stream().map(SkillDto::toSkill).collect(Collectors.toList()),
+                bio);
+    }
+
     public String getId() {
         return id;
     }

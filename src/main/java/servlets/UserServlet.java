@@ -24,9 +24,10 @@ public class UserServlet extends BaseServlet {
         List<String> pathVariables = Arrays.asList(req.getPathInfo().split("/"));
         String userId = pathVariables.get(1);
         try {
-            UserDto user = userService.getUserDto(userId);
-            req.setAttribute("users", Collections.singletonList(user));
+            UserDto userDto = userService.getUserDto(userId);
+            req.setAttribute("users", Collections.singletonList(userDto));
             req.setAttribute("isCurrentUser", userService.getCurrentUser().getId().equals(userId));
+            req.setAttribute("endorsedSkills", userService.getEndorsedList(userService.getCurrentUser(), userDto.toUser()));
             req.getRequestDispatcher("/users.jsp").forward(req, resp);
         } catch (NotFoundException e) {
             resp.setStatus(404);

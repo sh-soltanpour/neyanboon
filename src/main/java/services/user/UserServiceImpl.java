@@ -7,9 +7,7 @@ import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.skill.SkillService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
@@ -24,10 +22,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void initialize() {
         List<Skill> skills = new ArrayList<>(Arrays.asList(
-                new Skill("HTML", 5),
-                new Skill("Javascript", 4),
-                new Skill("C++", 2),
-                new Skill("Java", 3)
+                new Skill("HTML"),
+                new Skill("Javascript"),
+                new Skill("C++"),
+                new Skill("Java")
         ));
         currentUser = new User(
                 "1",
@@ -38,7 +36,23 @@ public class UserServiceImpl implements UserService {
                 skills,
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );
+        List<Skill> skills2 = new ArrayList<>(Arrays.asList(
+                new Skill("HTML"),
+                new Skill("Javascript"),
+                new Skill("C++"),
+                new Skill("Java")
+        ));
+        User user2 = new User(
+                "2",
+                "امیر",
+                "زاده",
+                "برنامە وب",
+                null,
+                skills2,
+                "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
+        );
         users.add(currentUser);
+        users.add(user2);
     }
 
     @Override
@@ -61,10 +75,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void endorse(User endorser, User endorsed, String skillName) {
+        endorsed.endorse(endorser, skillName);
+    }
+
+    @Override
+    public Set<String> getEndorsedList(User endorser, User endorsed) {
+        Set<String> result = new HashSet<>();
+        for(Skill skill: endorsed.getSkills()){
+            if (skill.hasEndorsedBy(endorser))
+                result.add(skill.getName());
+        }
+        return result;
+    }
+
+    @Override
     public void addSkill(String skillName, User currentUser) throws NotFoundException {
         Skill newSkill = findSkill(skillName);
 
-        currentUser.addSkill(newSkill);
+        currentUser.addSkill(newSkill.getName());
     }
 
     private Skill findSkill(String skillName) throws NotFoundException {

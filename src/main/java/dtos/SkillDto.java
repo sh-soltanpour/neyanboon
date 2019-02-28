@@ -36,7 +36,7 @@ public class SkillDto {
     }
 
     public Skill toSkill() {
-        return new Skill(name, point);
+        return new Skill(name);
     }
 
 
