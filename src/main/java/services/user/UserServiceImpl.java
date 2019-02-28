@@ -20,12 +20,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void initialize() {
-        List<Skill> skills = Arrays.asList(
+        List<Skill> skills = new ArrayList<>(Arrays.asList(
                 new Skill("HTML", 5),
                 new Skill("Javascript", 4),
                 new Skill("C++", 2),
                 new Skill("Java", 3)
-        );
+        ));
         currentUser = new User(
                 "1",
                 "علی",

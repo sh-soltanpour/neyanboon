@@ -4,7 +4,7 @@ import entitites.Skill;
 
 public class SkillDto {
     private String name;
-    private int point;
+    private int point = 0;
 
 
     public SkillDto() {

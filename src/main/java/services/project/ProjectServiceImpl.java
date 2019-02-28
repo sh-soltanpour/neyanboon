@@ -102,6 +102,24 @@ public class ProjectServiceImpl implements ProjectService {
         return findBid(user, project) != null;
     }
 
+    @Override
+    public List<SkillDto> getSkills() {
+        return skills;
+    }
+
+    @Override
+    public void addSkill(String skillName, User currentUser) throws NotFoundException {
+        Skill newSkill =
+                skills
+                        .stream()
+                        .filter(skillDto -> skillDto.getName().equals(skillName))
+                        .findFirst()
+                        .orElseThrow(NotFoundException::new)
+                        .toSkill();
+
+        currentUser.addSkill(newSkill);
+    }
+
 
     private Bid findBid(User user, Project project) {
         return bids

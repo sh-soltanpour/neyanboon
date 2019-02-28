@@ -20,11 +20,25 @@ public class User {
         this.jobTitle = jobTitle;
         this.profilePictureUrl = profilePictureUrl;
         this.bio = bio;
-        this.skills = skills;
+        if (skills != null)
+            this.skills = skills;
     }
 
     public List<Skill> getSkills() {
         return skills;
+    }
+
+
+    private boolean hasSkill(Skill newSkill) {
+        return skills
+                .stream()
+                .anyMatch(skill -> skill.getName().equals(newSkill.getName()));
+    }
+
+    public void addSkill(Skill newSkill) {
+        if (hasSkill(newSkill))
+            return;
+        skills.add(newSkill);
     }
 
     public void setSkills(List<Skill> skills) {
