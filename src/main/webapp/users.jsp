@@ -18,7 +18,13 @@
             skills:
             <ul>
                 <c:forEach var="skill" items="${user.skills}">
-                    <li>${skill.name} : ${skill.point}</li>
+                    <li>${skill.name} : ${skill.point}
+                        <c:if test="${isCurrentUser}">
+                        <form action="/delete-skill" method="post">
+                            <input type="hidden" name="skillName" value="${skill.name}"/>
+                            <input type="submit" value="Delete skill"/>
+                            </c:if>
+                    </li>
                 </c:forEach>
             </ul>
         </li>

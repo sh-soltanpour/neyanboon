@@ -20,4 +20,6 @@ public interface ProjectService {
     List<SkillDto> getSkills();
 
     void addSkill(String skillName, User currentUser) throws NotFoundException;
+
+    void deleteSkill(String skillName, User currentUser) throws NotFoundException;
 }

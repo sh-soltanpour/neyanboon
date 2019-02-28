@@ -13,10 +13,7 @@ import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.user.UserService;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProjectServiceImpl implements ProjectService {
@@ -109,15 +106,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void addSkill(String skillName, User currentUser) throws NotFoundException {
-        Skill newSkill =
-                skills
-                        .stream()
-                        .filter(skillDto -> skillDto.getName().equals(skillName))
-                        .findFirst()
-                        .orElseThrow(NotFoundException::new)
-                        .toSkill();
+        Skill newSkill = findSkill(skillName).toSkill();
 
         currentUser.addSkill(newSkill);
+    }
+
+    private SkillDto findSkill(String skillName) throws NotFoundException {
+        return skills
+                .stream()
+                .filter(skillDto -> skillDto.getName().equals(skillName))
+                .findFirst()
+                .orElseThrow(NotFoundException::new);
+    }
+
+    @Override
+    public void deleteSkill(String skillName, User currentUser) throws NotFoundException {
+        currentUser.deleteSkill(skillName);
     }
 
 

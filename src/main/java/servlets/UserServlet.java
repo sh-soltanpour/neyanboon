@@ -26,6 +26,7 @@ public class UserServlet extends BaseServlet {
         try {
             UserDto user = userService.getUserDto(userId);
             req.setAttribute("users", Collections.singletonList(user));
+            req.setAttribute("isCurrentUser", userService.getCurrentUser().getId().equals(userId));
             req.getRequestDispatcher("/users.jsp").forward(req, resp);
         } catch (NotFoundException e) {
             resp.setStatus(404);

@@ -102,4 +102,8 @@ public class User {
     public void setBio(String bio) {
         this.bio = bio;
     }
+
+    public void deleteSkill(String skillName) {
+        skills.removeIf(skill -> skill.getName().equals(skillName));
+    }
 }
