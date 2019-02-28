@@ -13,4 +13,6 @@ public interface UserService {
     User getUser(String userId) throws NotFoundException;
     UserDto getUserDto(String userId) throws NotFoundException;
     List<UserDto> getOtherUsers();
+    void addSkill(String skillName, User currentUser) throws NotFoundException;
+    void deleteSkill(String skillName, User currentUser) throws NotFoundException;
 }

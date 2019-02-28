@@ -20,7 +20,6 @@ public class ProjectServiceImpl implements ProjectService {
 
     private MetaDataClient metaDataClient = ObjectFactory.getMetaDataClient();
     private HashMap<String, Project> projects;
-    private List<SkillDto> skills;
     private List<Bid> bids = new ArrayList<>();
     private UserService userService = ObjectFactory.getUserService();
 
@@ -38,7 +37,6 @@ public class ProjectServiceImpl implements ProjectService {
                                 .map(ProjectDto::toProject)
                                 .collect(Collectors.toMap(Project::getId, project -> project))
                 );
-        skills = metaDataClient.getSkills();
     }
 
     @Override
@@ -97,31 +95,6 @@ public class ProjectServiceImpl implements ProjectService {
         if (project == null || user == null)
             return false;
         return findBid(user, project) != null;
-    }
-
-    @Override
-    public List<SkillDto> getSkills() {
-        return skills;
-    }
-
-    @Override
-    public void addSkill(String skillName, User currentUser) throws NotFoundException {
-        Skill newSkill = findSkill(skillName).toSkill();
-
-        currentUser.addSkill(newSkill);
-    }
-
-    private SkillDto findSkill(String skillName) throws NotFoundException {
-        return skills
-                .stream()
-                .filter(skillDto -> skillDto.getName().equals(skillName))
-                .findFirst()
-                .orElseThrow(NotFoundException::new);
-    }
-
-    @Override
-    public void deleteSkill(String skillName, User currentUser) throws NotFoundException {
-        currentUser.deleteSkill(skillName);
     }
 
 

@@ -14,14 +14,13 @@ import java.io.IOException;
 @WebServlet("/delete-skill")
 public class DeleteSkillServlet extends BaseServlet {
 
-    private ProjectService projectService = ObjectFactory.getProjectService();
     private UserService userService = ObjectFactory.getUserService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String skillName = req.getParameter("skillName");
         try {
-            projectService.deleteSkill(skillName, userService.getCurrentUser());
+            userService.deleteSkill(skillName, userService.getCurrentUser());
             resp.sendRedirect("/user/" + userService.getCurrentUser().getId());
         } catch (NotFoundException e) {
             showError(req, resp, "Project not fonud", HttpStatus.NOTFOUND);

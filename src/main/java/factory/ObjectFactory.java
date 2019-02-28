@@ -6,6 +6,8 @@ import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import services.project.ProjectService;
 import services.project.ProjectServiceImpl;
+import services.skill.SkillService;
+import services.skill.SkillServiceImpl;
 import services.user.UserService;
 import services.user.UserServiceImpl;
 
@@ -14,6 +16,7 @@ public class ObjectFactory {
     private static ProjectService projectService;
     private static UserService userService;
     private static MetaDataClient metaDataClient;
+    private static SkillService skillService;
 
     public static ProjectService getProjectService() {
         if (projectService == null) {
@@ -38,5 +41,11 @@ public class ObjectFactory {
             userService = new UserServiceImpl();
         }
         return userService;
+    }
+
+    public static SkillService getSkillService() {
+        if (skillService == null)
+            skillService = new SkillServiceImpl();
+        return skillService;
     }
 }

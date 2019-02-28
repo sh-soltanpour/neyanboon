@@ -2,6 +2,7 @@ package services.project;
 
 import dtos.ProjectDto;
 import dtos.SkillDto;
+import entitites.Skill;
 import entitites.User;
 import exceptions.AccessDeniedException;
 import exceptions.AlreadyExistsException;
@@ -17,9 +18,4 @@ public interface ProjectService {
     List<ProjectDto> getQualifiedProjects(User user);
     void addBidRequest(String projectId, User user, int amount) throws NotFoundException, AccessDeniedException, AlreadyExistsException;
     boolean bidRequested(String userId, String projectId);
-    List<SkillDto> getSkills();
-
-    void addSkill(String skillName, User currentUser) throws NotFoundException;
-
-    void deleteSkill(String skillName, User currentUser) throws NotFoundException;
 }
