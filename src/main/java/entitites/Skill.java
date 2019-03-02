@@ -22,10 +22,6 @@ public class Skill {
     }
 
     public boolean hasEndorsedBy(User endorser) {
-        System.out.println("skillName " + name);
-        System.out.println("endorser " + endorser.getId());
-        System.out.println("size endorserssss" + endorsedBy.size());
-        endorsedBy.forEach(user -> System.out.println("endorserssss: " + user.getId()));
         return endorsedBy.stream().anyMatch(user -> user.getId().equals(endorser.getId()));
     }
 
