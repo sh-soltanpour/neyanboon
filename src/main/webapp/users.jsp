@@ -24,12 +24,12 @@
                             <input type="hidden" name="skillName" value="${skill.name}"/>
                             <input type="submit" value="Delete skill"/>
                             </c:if>
-                            <c:if test="${!isCurrentUser && !endorsedSkills.contains(skill.name)}">
+                            <c:if test="${showEndorseButton && !isCurrentUser && !endorsedSkills.contains(skill.name)}">
                             <form action="/endorse" method="post">
                                 <input type="hidden" name="skillName" value="${skill.name}"/>
                                 <input type="hidden" name="endorsedUser" value="${user.id}"/>
                                 <input type="submit" value="Endorse"/>
-                            </c:if>
+                                </c:if>
 
                     </li>
                 </c:forEach>

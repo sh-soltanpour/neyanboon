@@ -15,14 +15,18 @@ public class Skill {
         this.endorsedBy = new ArrayList<>();
     }
 
-    public void endorse(User endorser) {
+    void endorse(User endorser) {
         if (endorsedBy.stream().anyMatch(user -> user.getId().equals(endorser.getId())))
             return;
         endorsedBy.add(endorser);
     }
 
-    public boolean hasEndorsedBy(User endroser) {
-        return endorsedBy.stream().anyMatch(user -> user.getId().equals(endroser.getId()));
+    public boolean hasEndorsedBy(User endorser) {
+        System.out.println("skillName " + name);
+        System.out.println("endorser " + endorser.getId());
+        System.out.println("size endorserssss" + endorsedBy.size());
+        endorsedBy.forEach(user -> System.out.println("endorserssss: " + user.getId()));
+        return endorsedBy.stream().anyMatch(user -> user.getId().equals(endorser.getId()));
     }
 
     public String getName() {

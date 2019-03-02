@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet("/user/*")
 public class UserServlet extends BaseServlet {
@@ -27,7 +28,11 @@ public class UserServlet extends BaseServlet {
             UserDto userDto = userService.getUserDto(userId);
             req.setAttribute("users", Collections.singletonList(userDto));
             req.setAttribute("isCurrentUser", userService.getCurrentUser().getId().equals(userId));
-            req.setAttribute("endorsedSkills", userService.getEndorsedList(userService.getCurrentUser(), userDto.toUser()));
+            req.setAttribute("showEndorseButton", true);
+            Set<String> endorsedSet = userService.getEndorsedList(userService.getCurrentUser().getId(),userDto.getId());
+            System.out.println(endorsedSet.size());
+            System.out.println(endorsedSet);
+            req.setAttribute("endorsedSkills", endorsedSet);
             req.getRequestDispatcher("/users.jsp").forward(req, resp);
         } catch (NotFoundException e) {
             resp.setStatus(404);

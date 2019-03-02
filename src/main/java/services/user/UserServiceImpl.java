@@ -76,19 +76,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void endorse(User endorser, User endorsed, String skillName) {
+
         endorsed.endorse(endorser, skillName);
     }
 
     @Override
-    public Set<String> getEndorsedList(User endorser, User endorsed) {
-        Set<String> result = new HashSet<>();
-        for(Skill skill: endorsed.getSkills()){
-            if (skill.hasEndorsedBy(endorser))
-                result.add(skill.getName());
-        }
-        return result;
-    }
+    public Set<String> getEndorsedList(String endorser, String endorsed) {
+        try {
+            User endorserUser = getUser(endorser);
+            User endorsedUser = getUser(endorsed);
+            Set<String> result = new HashSet<>();
+            for (Skill skill : endorsedUser.getSkills()) {
+                if (skill.hasEndorsedBy(endorserUser))
+                    result.add(skill.getName());
+            }
+            return result;
 
+        } catch (NotFoundException e) {
+            return new HashSet<>();
+        }
+    }
+    
     @Override
     public void addSkill(String skillName, User currentUser) throws NotFoundException {
         Skill newSkill = findSkill(skillName);
