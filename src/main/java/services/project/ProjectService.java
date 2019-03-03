@@ -1,8 +1,6 @@
 package services.project;
 
 import dtos.ProjectDto;
-import dtos.SkillDto;
-import entitites.Skill;
 import entitites.User;
 import exceptions.AccessDeniedException;
 import exceptions.AlreadyExistsException;

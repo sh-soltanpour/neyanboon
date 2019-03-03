@@ -29,9 +29,7 @@ public class UserServlet extends BaseServlet {
             req.setAttribute("users", Collections.singletonList(userDto));
             req.setAttribute("isCurrentUser", userService.getCurrentUser().getId().equals(userId));
             req.setAttribute("showEndorseButton", true);
-            Set<String> endorsedSet = userService.getEndorsedList(userService.getCurrentUser().getId(),userDto.getId());
-            System.out.println(endorsedSet.size());
-            System.out.println(endorsedSet);
+            Set<String> endorsedSet = userService.getEndorsedList(userService.getCurrentUser().getId(), userDto.getId());
             req.setAttribute("endorsedSkills", endorsedSet);
             req.getRequestDispatcher("/users.jsp").forward(req, resp);
         } catch (NotFoundException e) {

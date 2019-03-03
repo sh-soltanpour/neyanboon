@@ -10,10 +10,10 @@ public class User {
     private String jobTitle;
     private String profilePictureUrl;
     private String bio;
-    private List<Skill> skills = new ArrayList<>();
+    private List<UserSkill> skills = new ArrayList<>();
 
 
-    public User(String id, String firstName, String lastName, String jobTitle, String profilePictureUrl, List<Skill> skills, String bio) {
+    public User(String id, String firstName, String lastName, String jobTitle, String profilePictureUrl, List<UserSkill> skills, String bio) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -24,7 +24,7 @@ public class User {
             this.skills = skills;
     }
 
-    public List<Skill> getSkills() {
+    public List<UserSkill> getSkills() {
         return skills;
     }
 
@@ -39,15 +39,15 @@ public class User {
         if (hasSkill(skillName))
             return;
 
-        skills.add(new Skill(skillName));
+        skills.add(new UserSkill(skillName));
     }
 
-    public void setSkills(List<Skill> skills) {
+    public void setSkills(List<UserSkill> skills) {
         this.skills = skills;
     }
 
     public int getSkillPoints(String skillName) {
-        Skill foundSkill = skills.stream()
+        UserSkill foundSkill = skills.stream()
                 .filter(skill -> skill.getName().equals(skillName))
                 .findFirst()
                 .orElse(null);

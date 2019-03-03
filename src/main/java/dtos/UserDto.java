@@ -1,7 +1,7 @@
 package dtos;
 
-import entitites.Skill;
 import entitites.User;
+import entitites.UserSkill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,12 @@ public class UserDto {
     private String jobTitle;
     private String profilePictureUrl;
     private String bio;
-    private List<SkillDto> skills = new ArrayList<>();
+    private List<UserSkillDto> skills = new ArrayList<>();
 
     public UserDto() {
     }
 
-    private UserDto(String id, String firstName, String lastName, String jobTitle, String profilePictureUrl, String bio, List<SkillDto> skills) {
+    private UserDto(String id, String firstName, String lastName, String jobTitle, String profilePictureUrl, String bio, List<UserSkillDto> skills) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,7 +38,7 @@ public class UserDto {
                 user.getJobTitle(),
                 user.getProfilePictureUrl(),
                 user.getBio(),
-                user.getSkills().stream().map(SkillDto::of).collect(Collectors.toList())
+                user.getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList())
         );
     }
 
@@ -49,7 +49,7 @@ public class UserDto {
                 lastName,
                 jobTitle,
                 profilePictureUrl,
-                skills.stream().map(SkillDto::toSkill).collect(Collectors.toList()),
+                skills.stream().map(UserSkillDto::toUserSkill).collect(Collectors.toList()),
                 bio);
     }
 
@@ -101,11 +101,11 @@ public class UserDto {
         this.bio = bio;
     }
 
-    public List<SkillDto> getSkills() {
+    public List<UserSkillDto> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<SkillDto> skills) {
+    public void setSkills(List<UserSkillDto> skills) {
         this.skills = skills;
     }
 }

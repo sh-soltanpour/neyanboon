@@ -1,8 +1,9 @@
 package services.user;
 
 import dtos.UserDto;
-import entitites.Skill;
+import entitites.ProjectSkill;
 import entitites.User;
+import entitites.UserSkill;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.skill.SkillService;
@@ -21,11 +22,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void initialize() {
-        List<Skill> skills = new ArrayList<>(Arrays.asList(
-                new Skill("HTML"),
-                new Skill("Javascript"),
-                new Skill("C++"),
-                new Skill("Java")
+        List<UserSkill> skills = new ArrayList<>(Arrays.asList(
+                new UserSkill("HTML"),
+                new UserSkill("Javascript"),
+                new UserSkill("C++"),
+                new UserSkill("Java")
         ));
         currentUser = new User(
                 "1",
@@ -36,11 +37,11 @@ public class UserServiceImpl implements UserService {
                 skills,
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );
-        List<Skill> skills2 = new ArrayList<>(Arrays.asList(
-                new Skill("HTML"),
-                new Skill("Javascript"),
-                new Skill("C++"),
-                new Skill("Java")
+        List<UserSkill> skills2 = new ArrayList<>(Arrays.asList(
+                new UserSkill("HTML"),
+                new UserSkill("Javascript"),
+                new UserSkill("C++"),
+                new UserSkill("Java")
         ));
         User user2 = new User(
                 "2",
@@ -86,7 +87,7 @@ public class UserServiceImpl implements UserService {
             User endorserUser = getUser(endorser);
             User endorsedUser = getUser(endorsed);
             Set<String> result = new HashSet<>();
-            for (Skill skill : endorsedUser.getSkills()) {
+            for (UserSkill skill : endorsedUser.getSkills()) {
                 if (skill.hasEndorsedBy(endorserUser))
                     result.add(skill.getName());
             }
@@ -96,15 +97,15 @@ public class UserServiceImpl implements UserService {
             return new HashSet<>();
         }
     }
-    
+
     @Override
     public void addSkill(String skillName, User currentUser) throws NotFoundException {
-        Skill newSkill = findSkill(skillName);
+        ProjectSkill newSkill = findSkill(skillName);
 
         currentUser.addSkill(newSkill.getName());
     }
 
-    private Skill findSkill(String skillName) throws NotFoundException {
+    private ProjectSkill findSkill(String skillName) throws NotFoundException {
         return skillService.getSkills()
                 .stream()
                 .filter(skillDto -> skillDto.getName().equals(skillName))

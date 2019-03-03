@@ -3,16 +3,14 @@ package entitites;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Skill {
+public class UserSkill {
     //TODO: remove point, change name to UserSkill
     private String name;
-    private int point;
     private List<User> endorsedBy;
 
 
-    public Skill(String name) {
+    public UserSkill(String name) {
         this.name = name;
-        this.point = point;
         this.endorsedBy = new ArrayList<>();
     }
 
@@ -37,10 +35,7 @@ public class Skill {
     public int getPoints() {
         return endorsedBy.size();
     }
-
-    public void setPoints(int point) {
-        this.point = point;
-    }
+    
 
 
 }

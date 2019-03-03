@@ -111,7 +111,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private boolean isQualified(User user, Project project) {
         for (ProjectSkill requiredSkill : project.getSkills()) {
-            Skill userSkill = user
+            UserSkill userSkill = user
                     .getSkills()
                     .stream()
                     .filter(skill -> skill.getName().equals(requiredSkill.getName()))

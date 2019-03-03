@@ -1,9 +1,8 @@
 package servlets;
 
-import entitites.Skill;
+import entitites.UserSkill;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
-import services.project.ProjectService;
 import services.skill.SkillService;
 import services.user.UserService;
 
@@ -24,7 +23,7 @@ public class SkillServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("skills", skillService.getSkillsDto());
         Set<String> hasSkills = userService.getCurrentUser().getSkills()
-                .stream().map(Skill::getName).collect(Collectors.toSet());
+                .stream().map(UserSkill::getName).collect(Collectors.toSet());
         req.setAttribute("hasSkills", hasSkills);
         req.getRequestDispatcher("/skills.jsp").forward(req, resp);
     }
