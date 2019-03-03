@@ -37,23 +37,26 @@ public class UserServiceImpl implements UserService {
                 skills,
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );
-        List<UserSkill> skills2 = new ArrayList<>(Arrays.asList(
-                new UserSkill("HTML"),
-                new UserSkill("Javascript"),
-                new UserSkill("C++"),
-                new UserSkill("Java")
-        ));
-        User user2 = new User(
-                "2",
-                "امیر",
-                "زاده",
-                "برنامە وب",
-                null,
-                skills2,
-                "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
-        );
+        int idCounter = 2;
+        for (int i = 0; i < 5; i++) {
+            users.add(
+                    new User(
+                            String.valueOf(idCounter++),
+                            "امیر",
+                            "زاده",
+                            "برنامە وب",
+                            null,
+                            skills.stream().map(userSkill -> new UserSkill(userSkill.getName()))
+                                    .collect(Collectors.toList()),
+                            "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
+                    )
+            );
+        }
+
+
         users.add(currentUser);
-        users.add(user2);
+        users.forEach(user -> currentUser.getSkills().forEach(skill -> currentUser.endorse(user, skill.getName())));
+//        users.add(user2);
     }
 
     @Override
