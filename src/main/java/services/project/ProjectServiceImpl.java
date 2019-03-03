@@ -2,18 +2,17 @@ package services.project;
 
 import client.MetaDataClient;
 import dtos.ProjectDto;
-import dtos.SkillDto;
-import entitites.Bid;
-import entitites.Project;
-import entitites.Skill;
-import entitites.User;
+import entitites.*;
 import exceptions.AccessDeniedException;
 import exceptions.AlreadyExistsException;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.user.UserService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProjectServiceImpl implements ProjectService {
@@ -111,7 +110,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     private boolean isQualified(User user, Project project) {
-        for (Skill requiredSkill : project.getSkills()) {
+        for (ProjectSkill requiredSkill : project.getSkills()) {
             Skill userSkill = user
                     .getSkills()
                     .stream()
@@ -119,7 +118,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .findFirst()
                     .orElse(null);
 
-            if (userSkill == null || userSkill.getPoints() < requiredSkill.getPoints())
+            if (userSkill == null || userSkill.getPoints() < requiredSkill.getPoint())
                 return false;
         }
         return true;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Skill {
+    //TODO: remove point, change name to UserSkill
     private String name;
     private int point;
     private List<User> endorsedBy;

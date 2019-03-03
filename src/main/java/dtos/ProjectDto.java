@@ -1,7 +1,6 @@
 package dtos;
 
 import entitites.Project;
-import entitites.Skill;
 
 import java.util.Collections;
 import java.util.Date;
@@ -11,7 +10,7 @@ import java.util.stream.Collectors;
 public class ProjectDto {
     private String id;
     private String title;
-    private List<SkillDto> skills;
+    private List<ProjectSkillDto> skills;
     private int budget;
     private Date deadline;
     private String imageUrl;
@@ -27,7 +26,7 @@ public class ProjectDto {
         return new ProjectDto(
                 project.getId(),
                 project.getTitle(),
-                project.getSkills().stream().map(SkillDto::of).collect(Collectors.toList()),
+                project.getSkills().stream().map(ProjectSkillDto::of).collect(Collectors.toList()),
                 project.getBudget(),
                 project.getDeadline(),
                 project.getImageUrl(),
@@ -35,7 +34,7 @@ public class ProjectDto {
         );
     }
 
-    public ProjectDto(String id, String title, List<SkillDto> skills, int budget, Date deadline, String imageUrl, String description) {
+    private ProjectDto(String id, String title, List<ProjectSkillDto> skills, int budget, Date deadline, String imageUrl, String description) {
         this.id = id;
         this.title = title;
         this.skills = skills;
@@ -51,7 +50,7 @@ public class ProjectDto {
                 title,
                 description,
                 imageUrl,
-                skills.stream().map(skillDto -> skillDto.toSkill()).collect(Collectors.toList()),
+                skills.stream().map(ProjectSkillDto::toProjectSkill).collect(Collectors.toList()),
                 Collections.emptyList(),
                 budget,
                 deadline,
@@ -67,11 +66,11 @@ public class ProjectDto {
         this.title = title;
     }
 
-    public List<SkillDto> getSkills() {
+    public List<ProjectSkillDto> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<SkillDto> skills) {
+    public void setSkills(List<ProjectSkillDto> skills) {
         this.skills = skills;
     }
 
