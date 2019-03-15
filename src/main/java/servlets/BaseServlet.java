@@ -31,13 +31,6 @@ abstract class BaseServlet extends HttpServlet {
         }
     }
 
-    void showError(HttpServletRequest req, HttpServletResponse resp, String message, HttpStatus status)
-            throws ServletException, IOException {
-        req.setAttribute("message", message);
-        resp.setStatus(status.getCode());
-        req.getRequestDispatcher("/error.jsp").forward(req, resp);
-    }
-
     <T> T parseBody(HttpServletRequest req, Class<T> clazz) throws IOException{
         String json = req.getReader().lines().collect(Collectors.joining());
         return objectMapper.readValue(json, clazz);
