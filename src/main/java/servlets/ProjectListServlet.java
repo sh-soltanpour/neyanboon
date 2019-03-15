@@ -24,12 +24,6 @@ public class ProjectListServlet extends BaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = userService.getCurrentUser();
         List<ProjectDto> projects = projectService.getQualifiedProjects(user);
-        HashMap<String, Boolean> bidRequested = new HashMap<>();
-        for (ProjectDto project : projects) {
-            bidRequested.put(project.getId(), projectService.bidRequested(user.getId(), project.getId()));
-        }
-        req.setAttribute("projects", projects);
-        req.setAttribute("bidRequested", bidRequested);
-        req.getRequestDispatcher("/projects.jsp").forward(req, resp);
+        returnJson(projects, resp);
     }
 }
