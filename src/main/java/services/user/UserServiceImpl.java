@@ -53,10 +53,14 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-
         users.add(currentUser);
-        users.forEach(user -> currentUser.getSkills().forEach(skill -> currentUser.endorse(user, skill.getName())));
-//        users.add(user2);
+        users.forEach(user -> currentUser.getSkills().forEach(skill -> {
+            try {
+                currentUser.endorse(user, skill.getName());
+            } catch (NotFoundException e) {
+                e.printStackTrace();
+            }
+        }));
     }
 
     @Override
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .filter(user -> user.getId().equals(userId))
                 .findFirst()
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("User Not Found"));
     }
 
     @Override
@@ -79,8 +83,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void endorse(User endorser, User endorsed, String skillName) {
+    public void endorse(User endorser, User endorsed, String skillName) throws NotFoundException {
 
+        endorsed.endorse(endorser, skillName);
+    }
+
+    @Override
+    public void endorse(UserDto endorsedDto, String skillName) throws NotFoundException {
+        User endorsed = getUser(endorsedDto.getId());
+        User endorser = getCurrentUser();
         endorsed.endorse(endorser, skillName);
     }
 

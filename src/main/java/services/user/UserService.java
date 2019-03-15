@@ -16,6 +16,9 @@ public interface UserService {
     List<UserDto> getOtherUsers();
     void addSkill(String skillName, User currentUser) throws NotFoundException;
     void deleteSkill(String skillName, User currentUser) throws NotFoundException;
-    void endorse(User endorser, User endorsed, String skillName);
+    void endorse(User endorser, User endorsed, String skillName) throws NotFoundException;
+
+    void endorse(UserDto endorsedDto, String skillName) throws NotFoundException;
+
     Set<String> getEndorsedList(String endorser, String endorsed);
 }

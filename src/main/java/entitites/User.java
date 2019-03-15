@@ -1,5 +1,7 @@
 package entitites;
 
+import exceptions.NotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,11 +110,12 @@ public class User {
         skills.removeIf(skill -> skill.getName().equals(skillName));
     }
 
-    public void endorse(User endorser, String skillName) {
+    public void endorse(User endorser, String skillName) throws NotFoundException {
         skills
                 .stream()
                 .filter(skill -> skill.getName().equals(skillName))
                 .findFirst()
-                .ifPresent(foundSkill -> foundSkill.endorse(endorser));
+                .orElseThrow(()-> new NotFoundException("Skill Not Found"))
+                .endorse(endorser);
     }
 }
