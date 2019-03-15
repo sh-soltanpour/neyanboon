@@ -26,16 +26,9 @@ public class UserServlet extends BaseServlet {
         String userId = pathVariables.get(1);
         try {
             UserDto userDto = userService.getUserDto(userId);
-            req.setAttribute("users", Collections.singletonList(userDto));
-            req.setAttribute("isCurrentUser", userService.getCurrentUser().getId().equals(userId));
-            req.setAttribute("showEndorseButton", true);
-            Set<String> endorsedSet = userService.getEndorsedList(userService.getCurrentUser().getId(), userDto.getId());
-            req.setAttribute("endorsedSkills", endorsedSet);
-            req.getRequestDispatcher("/users.jsp").forward(req, resp);
+            returnJson(userDto, resp);
         } catch (NotFoundException e) {
-            resp.setStatus(404);
-            req.setAttribute("message", "User not found");
-            req.getRequestDispatcher("/error.jsp").forward(req, resp);
+            returnError("User not found", HttpStatus.NOTFOUND, resp);
         }
     }
 }
