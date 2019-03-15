@@ -1,5 +1,6 @@
 package servlets;
 
+import dtos.BidDto;
 import exceptions.AccessDeniedException;
 import exceptions.AlreadyExistsException;
 import exceptions.NotFoundException;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet("/bid")
+@WebServlet(urlPatterns = {"/projects/bids"})
 public class BidServlet extends BaseServlet {
     private ProjectService projectService = ObjectFactory.getProjectService();
     private UserService userService = ObjectFactory.getUserService();
@@ -21,16 +22,14 @@ public class BidServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            int amount = Integer.valueOf(req.getParameter("amount"));
-            String projectId = req.getParameter("projectId");
-            projectService.addBidRequest(projectId, userService.getCurrentUser(), amount);
-            resp.sendRedirect("/project");
+            BidDto bidDto = parseBody(req, BidDto.class);
+            projectService.addBidRequest(bidDto.getProject().getId(), userService.getCurrentUser(), bidDto.getBidAmount());
         } catch (NotFoundException e) {
-            showError(req, resp, "project not found", HttpStatus.NOTFOUND);
+            returnError("Project Not Found", HttpStatus.NOTFOUND, resp);
         } catch (AccessDeniedException e) {
-            showError(req, resp, e.getMessage(), HttpStatus.NOTFOUND);
+            returnError("Access Denied", HttpStatus.ACCESSDENIED, resp);
         } catch (AlreadyExistsException e) {
-            showError(req, resp, e.getMessage(), HttpStatus.CONFLICT);
+            returnError("Bid Already Exists", HttpStatus.CONFLICT, resp);
         }
     }
 }
