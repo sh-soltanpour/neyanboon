@@ -19,7 +19,6 @@ public class UsersListServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<UserDto> users = userService.getOtherUsers();
-        req.setAttribute("users", users);
-        req.getRequestDispatcher("/users.jsp").forward(req, resp);
+        returnJson(users, resp);
     }
 }
