@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/user")
+@WebServlet("/users")
 public class UsersListServlet extends BaseServlet {
     private UserService userService = ObjectFactory.getUserService();
 

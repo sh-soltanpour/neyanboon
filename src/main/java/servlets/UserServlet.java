@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet("/user/*")
+@WebServlet("/users/*")
 public class UserServlet extends BaseServlet {
     private UserService userService = ObjectFactory.getUserService();
 

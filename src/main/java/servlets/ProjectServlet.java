@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@WebServlet("/project/*")
+@WebServlet("/projects/*")
 public class ProjectServlet extends BaseServlet {
     private ProjectService projectService = ObjectFactory.getProjectService();
     private UserService userService = ObjectFactory.getUserService();
