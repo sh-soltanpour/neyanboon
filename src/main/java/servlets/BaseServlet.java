@@ -48,6 +48,7 @@ abstract class BaseServlet extends HttpServlet {
             out.print(json);
             out.flush();
         } catch (Exception e) {
+            e.printStackTrace();
             resp.setStatus(HttpStatus.INTERNAL_SERVER.getCode());
         }
     }
@@ -57,6 +58,10 @@ abstract class BaseServlet extends HttpServlet {
     }
 
     private class ErrorMessage {
+        public String getMessage() {
+            return message;
+        }
+
         String message;
 
         private ErrorMessage(String message) {

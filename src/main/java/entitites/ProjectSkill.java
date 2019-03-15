@@ -1,13 +1,16 @@
 package entitites;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 public class ProjectSkill {
     private String name;
-    private int point;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer point = null;
 
     public ProjectSkill() {
     }
 
-    public ProjectSkill(String name, int point) {
+    public ProjectSkill(String name, Integer point) {
         this.name = name;
         this.point = point;
     }
@@ -20,7 +23,7 @@ public class ProjectSkill {
         this.name = name;
     }
 
-    public int getPoint() {
+    public Integer getPoint() {
         return point;
     }
 

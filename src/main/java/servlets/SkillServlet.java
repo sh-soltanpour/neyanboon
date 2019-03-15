@@ -1,6 +1,5 @@
 package servlets;
 
-import entitites.UserSkill;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.skill.SkillService;
@@ -11,8 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @WebServlet("/skills")
 public class SkillServlet extends BaseServlet {
@@ -21,11 +18,7 @@ public class SkillServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("skills", skillService.getSkillsDto());
-        Set<String> hasSkills = userService.getCurrentUser().getSkills()
-                .stream().map(UserSkill::getName).collect(Collectors.toSet());
-        req.setAttribute("hasSkills", hasSkills);
-        req.getRequestDispatcher("/skills.jsp").forward(req, resp);
+        returnJson(skillService.getSkillsDto(), resp);
     }
 
     @Override

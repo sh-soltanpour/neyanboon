@@ -28,20 +28,12 @@ public class ProjectServlet extends BaseServlet {
         String projectId = pathVariables.get(1);
         try {
             ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
-            req.setAttribute("projects", Collections.singletonList(project));
-            boolean bidRequested = projectService.bidRequested(userService.getCurrentUser().getId(), projectId);
-            req.setAttribute("bidRequested", Collections.singletonMap(project.getId(), bidRequested));
-            req.getRequestDispatcher("/projects.jsp").forward(req, resp);
-
+            returnJson(project, resp);
         } catch (AccessDeniedException e) {
-            req.setAttribute("message", "Access Denied");
-            resp.setStatus(403);
-            req.getRequestDispatcher("/error.jsp").forward(req, resp);
+            returnError("Access Denied",HttpStatus.ACCESSDENIED, resp);
 
         } catch (NotFoundException e) {
-            req.setAttribute("message", "Project not found");
-            resp.setStatus(404);
-            req.getRequestDispatcher("/error.jsp").forward(req, resp);
+            returnError("Not Found", HttpStatus.NOTFOUND, resp);
         }
 
     }

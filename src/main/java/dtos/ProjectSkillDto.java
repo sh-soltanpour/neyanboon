@@ -1,12 +1,14 @@
 package dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import entitites.ProjectSkill;
 
 public class ProjectSkillDto {
 
 
     private String name;
-    private int point;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer point = null;
 
     public static ProjectSkillDto of(ProjectSkill projectSkill) {
         return new ProjectSkillDto(
@@ -22,7 +24,7 @@ public class ProjectSkillDto {
     public ProjectSkillDto() {
     }
 
-    private ProjectSkillDto(String name, int point) {
+    private ProjectSkillDto(String name, Integer point) {
         this.name = name;
         this.point = point;
     }
@@ -35,7 +37,7 @@ public class ProjectSkillDto {
         this.name = name;
     }
 
-    public int getPoint() {
+    public Integer getPoint() {
         return point;
     }
 
