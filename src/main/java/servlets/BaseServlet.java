@@ -9,13 +9,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.stream.Collectors;
 
 abstract class BaseServlet extends HttpServlet {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     enum HttpStatus {
-        OK(200), NOTFOUND(404), ACCESSDENIED(403), CONFLICT(409), INTERNAL_SERVER(500);
+        OK(200), NOTFOUND(404), ACCESSDENIED(403), CONFLICT(409), INTERNAL_SERVER(500),
+        CREATED(201);
+
 
         private final int code;      // Private variable
 
@@ -33,6 +36,11 @@ abstract class BaseServlet extends HttpServlet {
         req.setAttribute("message", message);
         resp.setStatus(status.getCode());
         req.getRequestDispatcher("/error.jsp").forward(req, resp);
+    }
+
+    <T> T parseBody(HttpServletRequest req, Class<T> clazz) throws IOException{
+        String json = req.getReader().lines().collect(Collectors.joining());
+        return objectMapper.readValue(json, clazz);
     }
 
     void returnJson(Object obj, HttpServletResponse resp) {
