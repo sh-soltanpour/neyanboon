@@ -3,6 +3,7 @@ package servlets;
 import dtos.BidDto;
 import exceptions.AccessDeniedException;
 import exceptions.AlreadyExistsException;
+import exceptions.BadRequestException;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.project.ProjectService;
@@ -23,13 +24,18 @@ public class BidServlet extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             BidDto bidDto = parseBody(req, BidDto.class);
-            projectService.addBidRequest(bidDto.getProject().getId(), userService.getCurrentUser(), bidDto.getBidAmount());
+            projectService.addBidRequest(
+                    bidDto.getProject().getId(), userService.getCurrentUser(), bidDto.getBidAmount()
+            );
+            returnJson(projectService.getProject(bidDto.getProject().getId()), resp);
         } catch (NotFoundException e) {
             returnError("Project Not Found", HttpStatus.NOTFOUND, resp);
         } catch (AccessDeniedException e) {
             returnError("Access Denied", HttpStatus.ACCESSDENIED, resp);
         } catch (AlreadyExistsException e) {
             returnError("Bid Already Exists", HttpStatus.CONFLICT, resp);
+        } catch (BadRequestException e) {
+            returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
         }
     }
 }

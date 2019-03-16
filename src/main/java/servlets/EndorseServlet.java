@@ -24,6 +24,7 @@ public class EndorseServlet extends BaseServlet {
                     request.getEndorsedUser(),
                     request.getSkill().getName()
             );
+            returnJson(userService.getUser(request.getEndorsedUser().getId()).getSkills(), resp);
         } catch (NotFoundException e) {
             returnError(e.getMessage(), HttpStatus.NOTFOUND, resp);
         }

@@ -5,6 +5,7 @@ import dtos.ProjectDto;
 import entitites.*;
 import exceptions.AccessDeniedException;
 import exceptions.AlreadyExistsException;
+import exceptions.BadRequestException;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.user.UserService;
@@ -70,10 +71,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void addBidRequest(String projectId, User user, int amount)
-            throws NotFoundException, AccessDeniedException, AlreadyExistsException {
+            throws NotFoundException, AccessDeniedException, AlreadyExistsException, BadRequestException {
         Project project = projects.get(projectId);
         if (project == null)
             throw new NotFoundException();
+        if (amount > project.getBudget())
+            throw new BadRequestException("Enetered amount is not valid");
         if (!isQualified(user, project))
             throw new AccessDeniedException();
         if (findBid(user, project) != null)
