@@ -1,5 +1,6 @@
 package entitites;
 
+import exceptions.AlreadyExistsException;
 import exceptions.NotFoundException;
 import exceptions.PreConditionFailedException;
 
@@ -111,14 +112,15 @@ public class User {
         skills.removeIf(skill -> skill.getName().equals(skillName));
     }
 
-    public void endorse(User endorser, String skillName) throws NotFoundException, PreConditionFailedException {
+    public void endorse(User endorser, String skillName)
+            throws NotFoundException, PreConditionFailedException, AlreadyExistsException {
         if (id.equals(endorser.getId()))
             throw new PreConditionFailedException("You Cannot Endorse Yourself");
         skills
                 .stream()
                 .filter(skill -> skill.getName().equals(skillName))
                 .findFirst()
-                .orElseThrow(()-> new NotFoundException("Skill Not Found"))
+                .orElseThrow(() -> new NotFoundException("Skill Not Found"))
                 .endorse(endorser);
     }
 }

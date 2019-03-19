@@ -2,6 +2,7 @@ package services.user;
 
 import dtos.UserDto;
 import entitites.User;
+import exceptions.AlreadyExistsException;
 import exceptions.NotFoundException;
 import exceptions.PreConditionFailedException;
 
@@ -18,7 +19,7 @@ public interface UserService {
     void addSkill(String skillName, User currentUser) throws NotFoundException;
     void deleteSkill(String skillName, User currentUser) throws NotFoundException;
 
-    void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException;
+    void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException, AlreadyExistsException;
 
     Set<String> getEndorsedList(String endorser, String endorsed);
 }

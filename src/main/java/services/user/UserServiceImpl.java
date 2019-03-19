@@ -4,6 +4,7 @@ import dtos.UserDto;
 import entitites.ProjectSkill;
 import entitites.User;
 import entitites.UserSkill;
+import exceptions.AlreadyExistsException;
 import exceptions.NotFoundException;
 import exceptions.PreConditionFailedException;
 import factory.ObjectFactory;
@@ -85,7 +86,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException {
+    public void endorse(UserDto endorsedDto, String skillName)
+            throws NotFoundException, PreConditionFailedException, AlreadyExistsException {
         User endorsed = getUser(endorsedDto.getId());
         User endorser = getCurrentUser();
         endorsed.endorse(endorser, skillName);

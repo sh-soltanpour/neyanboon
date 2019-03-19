@@ -1,5 +1,6 @@
 package servlets;
 
+import exceptions.AlreadyExistsException;
 import exceptions.BadRequestException;
 import exceptions.NotFoundException;
 import exceptions.PreConditionFailedException;
@@ -33,6 +34,8 @@ public class EndorseServlet extends BaseServlet {
             returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
         } catch (PreConditionFailedException e) {
             returnError(e.getMessage(), HttpStatus.PRECONDITION_FAILED, resp);
+        } catch (AlreadyExistsException e) {
+            returnError(e.getMessage(), HttpStatus.CONFLICT, resp);
         }
     }
 }

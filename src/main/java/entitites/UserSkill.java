@@ -1,5 +1,7 @@
 package entitites;
 
+import exceptions.AlreadyExistsException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +16,9 @@ public class UserSkill {
         this.endorsedBy = new ArrayList<>();
     }
 
-    void endorse(User endorser) {
+    void endorse(User endorser) throws AlreadyExistsException {
         if (endorsedBy.stream().anyMatch(user -> user.getId().equals(endorser.getId())))
-            return;
+            throw new AlreadyExistsException("You have already endorsed this skill");
         endorsedBy.add(endorser);
     }
 
