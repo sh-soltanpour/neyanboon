@@ -2,6 +2,7 @@ package servlets;
 
 import exceptions.BadRequestException;
 import exceptions.NotFoundException;
+import exceptions.PreConditionFailedException;
 import factory.ObjectFactory;
 import services.user.UserService;
 import servlets.models.EndorseRequest;
@@ -30,6 +31,8 @@ public class EndorseServlet extends BaseServlet {
             returnError(e.getMessage(), HttpStatus.NOTFOUND, resp);
         } catch (BadRequestException e) {
             returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
+        } catch (PreConditionFailedException e) {
+            returnError(e.getMessage(), HttpStatus.PRECONDITION_FAILED, resp);
         }
     }
 }

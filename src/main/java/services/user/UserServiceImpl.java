@@ -5,6 +5,7 @@ import entitites.ProjectSkill;
 import entitites.User;
 import entitites.UserSkill;
 import exceptions.NotFoundException;
+import exceptions.PreConditionFailedException;
 import factory.ObjectFactory;
 import services.skill.SkillService;
 
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
         users.forEach(user -> currentUser.getSkills().forEach(skill -> {
             try {
                 currentUser.endorse(user, skill.getName());
-            } catch (NotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }));
@@ -82,14 +83,9 @@ public class UserServiceImpl implements UserService {
         currentUser.deleteSkill(skillName);
     }
 
-    @Override
-    public void endorse(User endorser, User endorsed, String skillName) throws NotFoundException {
-
-        endorsed.endorse(endorser, skillName);
-    }
 
     @Override
-    public void endorse(UserDto endorsedDto, String skillName) throws NotFoundException {
+    public void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException {
         User endorsed = getUser(endorsedDto.getId());
         User endorser = getCurrentUser();
         endorsed.endorse(endorser, skillName);

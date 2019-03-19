@@ -1,6 +1,7 @@
 package entitites;
 
 import exceptions.NotFoundException;
+import exceptions.PreConditionFailedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +111,9 @@ public class User {
         skills.removeIf(skill -> skill.getName().equals(skillName));
     }
 
-    public void endorse(User endorser, String skillName) throws NotFoundException {
+    public void endorse(User endorser, String skillName) throws NotFoundException, PreConditionFailedException {
+        if (id.equals(endorser.getId()))
+            throw new PreConditionFailedException("You Cannot Endorse Yourself");
         skills
                 .stream()
                 .filter(skill -> skill.getName().equals(skillName))

@@ -18,7 +18,7 @@ abstract class BaseServlet extends HttpServlet {
 
     enum HttpStatus {
         OK(200), NOTFOUND(404), ACCESSDENIED(403), CONFLICT(409), INTERNAL_SERVER(500),
-        CREATED(201), BAD_REQUEST(400);
+        CREATED(201), BAD_REQUEST(400), PRECONDITION_FAILED(412);
 
 
         private final int code;      // Private variable
