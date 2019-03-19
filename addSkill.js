@@ -1,6 +1,6 @@
 var apiUrl = "http://localhost:8081"
 var data = JSON.stringify({
-  "name": "HTML"
+  "name": "Android"
 });
 
 var xhr = new XMLHttpRequest();
