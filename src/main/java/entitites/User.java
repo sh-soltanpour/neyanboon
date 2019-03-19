@@ -39,9 +39,9 @@ public class User {
                 .anyMatch(skill -> skill.getName().equals(skillName));
     }
 
-    public void addSkill(String skillName) {
+    public void addSkill(String skillName) throws AlreadyExistsException {
         if (hasSkill(skillName))
-            return;
+            throw new AlreadyExistsException("You already have this skill");
 
         skills.add(new UserSkill(skillName));
     }

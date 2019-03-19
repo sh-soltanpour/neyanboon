@@ -16,7 +16,7 @@ public interface UserService {
     User getUser(String userId) throws NotFoundException;
     UserDto getUserDto(String userId) throws NotFoundException;
     List<UserDto> getOtherUsers();
-    void addSkill(String skillName, User currentUser) throws NotFoundException;
+    void addSkill(String skillName, User currentUser) throws NotFoundException, AlreadyExistsException;
     void deleteSkill(String skillName, User currentUser) throws NotFoundException;
 
     void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException, AlreadyExistsException;

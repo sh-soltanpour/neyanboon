@@ -2,6 +2,7 @@ package servlets;
 
 import dtos.ProjectSkillDto;
 import entitites.ProjectSkill;
+import exceptions.AlreadyExistsException;
 import exceptions.BadRequestException;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
@@ -28,6 +29,8 @@ public class UserSkillServlet extends BaseServlet {
             returnError("Skill not found", HttpStatus.NOTFOUND, resp);
         } catch (BadRequestException e) {
             returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
+        } catch (AlreadyExistsException e) {
+            returnError(e.getMessage(), HttpStatus.CONFLICT, resp);
         }
     }
 

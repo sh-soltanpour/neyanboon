@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addSkill(String skillName, User currentUser) throws NotFoundException {
+    public void addSkill(String skillName, User currentUser) throws NotFoundException, AlreadyExistsException {
         ProjectSkill newSkill = findSkill(skillName);
 
         currentUser.addSkill(newSkill.getName());
