@@ -30,11 +30,9 @@ public class ProjectServlet extends BaseServlet {
             ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
             returnJson(project, resp);
         } catch (AccessDeniedException e) {
-            returnError("Access Denied",HttpStatus.ACCESSDENIED, resp);
-
+            returnError("Access Denied", HttpStatus.ACCESSDENIED, resp);
         } catch (NotFoundException e) {
             returnError("Not Found", HttpStatus.NOTFOUND, resp);
         }
-
     }
 }
