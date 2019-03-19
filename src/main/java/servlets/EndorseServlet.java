@@ -1,5 +1,6 @@
 package servlets;
 
+import exceptions.BadRequestException;
 import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.user.UserService;
@@ -18,8 +19,8 @@ public class EndorseServlet extends BaseServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        EndorseRequest request = parseBody(req, EndorseRequest.class);
         try {
+            EndorseRequest request = parseBody(req, EndorseRequest.class);
             userService.endorse(
                     request.getEndorsedUser(),
                     request.getSkill().getName()
@@ -27,6 +28,8 @@ public class EndorseServlet extends BaseServlet {
             returnJson(userService.getUser(request.getEndorsedUser().getId()).getSkills(), resp);
         } catch (NotFoundException e) {
             returnError(e.getMessage(), HttpStatus.NOTFOUND, resp);
+        } catch (BadRequestException e) {
+            returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
         }
     }
 }

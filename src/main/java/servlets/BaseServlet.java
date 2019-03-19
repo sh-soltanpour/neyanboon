@@ -2,6 +2,7 @@ package servlets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import exceptions.BadRequestException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,9 +32,15 @@ abstract class BaseServlet extends HttpServlet {
         }
     }
 
-    <T> T parseBody(HttpServletRequest req, Class<T> clazz) throws IOException{
-        String json = req.getReader().lines().collect(Collectors.joining());
-        return objectMapper.readValue(json, clazz);
+    <T> T parseBody(HttpServletRequest req, Class<T> clazz) throws BadRequestException {
+        try {
+            String json = req.getReader().lines().collect(Collectors.joining());
+            return objectMapper.readValue(json, clazz);
+        }
+        catch (IOException e){
+            throw new BadRequestException("Couldn't parse request body");
+        }
+
     }
 
     void returnJson(Object obj, HttpServletResponse resp) {
