@@ -108,7 +108,9 @@ public class User {
         this.bio = bio;
     }
 
-    public void deleteSkill(String skillName) {
+    public void deleteSkill(String skillName) throws NotFoundException {
+        if(!hasSkill(skillName))
+            throw new NotFoundException("Skill Not Found");
         skills.removeIf(skill -> skill.getName().equals(skillName));
     }
 
