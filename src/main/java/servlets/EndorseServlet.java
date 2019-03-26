@@ -14,6 +14,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -30,6 +32,17 @@ public class EndorseServlet extends BaseServlet {
                     request.getEndorsedUser(),
                     request.getSkill().getName()
             );
+            List<UserSkillDto> userSkills = userService.getUser(request.getEndorsedUser().getId())
+                    .getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList());
+            Set<String> endorsedSkills = userService.getEndorsedList(
+                    userService.getCurrentUser().getId(),
+                    request.getEndorsedUser().getId());
+
+            userSkills.forEach(skill -> {
+                skill.setEndorsed(
+                        endorsedSkills.contains(skill.getName())
+                );
+            });
             returnJson(
                     userService.getUser(request.getEndorsedUser().getId())
                             .getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
