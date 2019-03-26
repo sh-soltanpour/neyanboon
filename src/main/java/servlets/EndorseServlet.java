@@ -1,5 +1,6 @@
 package servlets;
 
+import dtos.UserSkillDto;
 import exceptions.AlreadyExistsException;
 import exceptions.BadRequestException;
 import exceptions.NotFoundException;
@@ -13,6 +14,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @WebServlet("/users/skills/endorses")
 public class EndorseServlet extends BaseServlet {
@@ -27,7 +30,10 @@ public class EndorseServlet extends BaseServlet {
                     request.getEndorsedUser(),
                     request.getSkill().getName()
             );
-            returnJson(userService.getUser(request.getEndorsedUser().getId()).getSkills(), resp);
+            returnJson(
+                    userService.getUser(request.getEndorsedUser().getId())
+                            .getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
+                    resp);
         } catch (NotFoundException e) {
             returnError(e.getMessage(), HttpStatus.NOTFOUND, resp);
         } catch (BadRequestException e) {
