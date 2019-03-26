@@ -1,7 +1,9 @@
 package servlets;
 
 import dtos.ProjectSkillDto;
+import dtos.UserSkillDto;
 import entitites.ProjectSkill;
+import entitites.UserSkill;
 import exceptions.AlreadyExistsException;
 import exceptions.BadRequestException;
 import exceptions.NotFoundException;
@@ -13,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.stream.Collectors;
 
 @WebServlet("/users/skills")
 public class UserSkillServlet extends BaseServlet {
@@ -39,7 +42,9 @@ public class UserSkillServlet extends BaseServlet {
         try {
             String skillName = parseBody(req, ProjectSkill.class).getName();
             userService.deleteSkill(skillName, userService.getCurrentUser());
-            returnJson(userService.getCurrentUser().getSkills(), resp);
+            returnJson(
+                    userService.getCurrentUser().getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
+                    resp);
         } catch (NotFoundException e1) {
             returnError("Skill Not Found", HttpStatus.NOTFOUND, resp);
         } catch (BadRequestException e) {
