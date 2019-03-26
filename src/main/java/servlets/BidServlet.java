@@ -8,6 +8,7 @@ import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import services.project.ProjectService;
 import services.user.UserService;
+import servlets.models.BidRequestedResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,5 +38,16 @@ public class BidServlet extends BaseServlet {
         } catch (BadRequestException e) {
             returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String projectId = req.getParameter("projectId");
+        returnJson(
+                new BidRequestedResponse(
+                        projectService.bidRequested(userService.getCurrentUser().getId(), projectId)
+                ),
+                resp
+        );
     }
 }

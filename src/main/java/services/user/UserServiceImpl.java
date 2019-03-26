@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
                 "علی",
                 "شریف زاده",
                 "برنامەنویس وب",
-                null,
+                "https://storage.backtory.com/shahryar/oliver.jpg",
                 skills,
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );

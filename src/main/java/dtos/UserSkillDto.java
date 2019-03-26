@@ -6,6 +6,7 @@ import entitites.UserSkill;
 public class UserSkillDto {
     private String name;
     private int point = 0;
+    private boolean endorsed = false;
 
 
     public UserSkillDto() {
@@ -40,5 +41,11 @@ public class UserSkillDto {
         return new UserSkill(name);
     }
 
+    public boolean isEndorsed() {
+        return endorsed;
+    }
 
+    public void setEndorsed(boolean endorsed) {
+        this.endorsed = endorsed;
+    }
 }
