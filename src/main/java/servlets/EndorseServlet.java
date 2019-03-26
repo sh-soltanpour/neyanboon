@@ -43,10 +43,7 @@ public class EndorseServlet extends BaseServlet {
                         endorsedSkills.contains(skill.getName())
                 );
             });
-            returnJson(
-                    userService.getUser(request.getEndorsedUser().getId())
-                            .getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
-                    resp);
+            returnJson(userSkills, resp);
         } catch (NotFoundException e) {
             returnError(e.getMessage(), HttpStatus.NOTFOUND, resp);
         } catch (BadRequestException e) {
