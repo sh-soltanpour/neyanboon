@@ -76,7 +76,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (project == null)
             throw new NotFoundException();
         if (amount > project.getBudget())
-            throw new BadRequestException("Enetered amount is not valid");
+            throw new BadRequestException("Entered amount is not valid");
         if (!isQualified(user, project))
             throw new AccessDeniedException();
         if (findBid(user, project) != null)

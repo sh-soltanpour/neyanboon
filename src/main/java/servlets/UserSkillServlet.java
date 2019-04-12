@@ -27,7 +27,10 @@ public class UserSkillServlet extends BaseServlet {
         try {
             String skillName = parseBody(req, ProjectSkillDto.class).getName();
             userService.addSkill(skillName, userService.getCurrentUser());
-            returnJson(userService.getCurrentUser().getSkills(), resp, HttpStatus.CREATED);
+            returnJson(
+                    userService.getCurrentUser().getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
+                    resp,
+                    HttpStatus.CREATED);
         } catch (NotFoundException e) {
             returnError("Skill not found", HttpStatus.NOTFOUND, resp);
         } catch (BadRequestException e) {

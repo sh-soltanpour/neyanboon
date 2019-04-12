@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
                             "امیر",
                             "زاده",
                             "برنامە وب",
-                            null,
+                            "https://storage.backtory.com/shahryar/oliver.jpg",
                             skills.stream().map(userSkill -> new UserSkill(userSkill.getName()))
                                     .collect(Collectors.toList()),
                             "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
@@ -58,7 +58,8 @@ public class UserServiceImpl implements UserService {
         users.add(currentUser);
         users.forEach(user -> currentUser.getSkills().forEach(skill -> {
             try {
-                currentUser.endorse(user, skill.getName());
+                if (user != currentUser)
+                    currentUser.endorse(user, skill.getName());
             } catch (Exception e) {
                 e.printStackTrace();
             }
