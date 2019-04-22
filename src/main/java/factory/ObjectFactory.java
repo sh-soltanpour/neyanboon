@@ -4,6 +4,8 @@ import client.MetaDataClient;
 import feign.Feign;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
+import repositories.user.UserRepository;
+import repositories.user.UserRepositoryImpl;
 import services.project.ProjectService;
 import services.project.ProjectServiceImpl;
 import services.skill.SkillService;
@@ -12,11 +14,15 @@ import services.user.UserService;
 import services.user.UserServiceImpl;
 
 public class ObjectFactory {
-
+    //services
     private static ProjectService projectService;
     private static UserService userService;
     private static MetaDataClient metaDataClient;
     private static SkillService skillService;
+
+    //repositories
+    private static UserRepository userRepository;
+
 
     public static ProjectService getProjectService() {
         if (projectService == null) {
@@ -47,5 +53,11 @@ public class ObjectFactory {
         if (skillService == null)
             skillService = new SkillServiceImpl();
         return skillService;
+    }
+
+    public static UserRepository getUserRepository() {
+        if (userRepository == null)
+            userRepository = new UserRepositoryImpl();
+        return userRepository;
     }
 }
