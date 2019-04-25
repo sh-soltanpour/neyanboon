@@ -2,10 +2,7 @@ package services.project;
 
 import dtos.ProjectDto;
 import entitites.User;
-import exceptions.AccessDeniedException;
-import exceptions.AlreadyExistsException;
-import exceptions.BadRequestException;
-import exceptions.NotFoundException;
+import exceptions.*;
 
 import java.util.List;
 
@@ -23,5 +20,5 @@ public interface ProjectService {
     void addBidRequest(String projectId, User user, int amount)
             throws NotFoundException, AccessDeniedException, AlreadyExistsException, BadRequestException;
 
-    boolean bidRequested(String userId, String projectId);
+    boolean bidRequested(String userId, String projectId) throws InternalErrorException;
 }

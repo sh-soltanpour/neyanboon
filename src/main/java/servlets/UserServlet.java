@@ -1,5 +1,6 @@
 package servlets;
 
+import exceptions.InternalErrorException;
 import factory.ObjectFactory;
 import dtos.UserDto;
 import exceptions.NotFoundException;
@@ -35,6 +36,8 @@ public class UserServlet extends BaseServlet {
             returnJson(userDto, resp);
         } catch (NotFoundException e) {
             returnError("User not found", HttpStatus.NOTFOUND, resp);
+        } catch (InternalErrorException e) {
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
         }
     }
 }

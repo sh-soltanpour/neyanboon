@@ -5,6 +5,7 @@ import entitites.ProjectSkill;
 import entitites.User;
 import entitites.UserSkill;
 import exceptions.AlreadyExistsException;
+import exceptions.InternalErrorException;
 import exceptions.NotFoundException;
 import exceptions.PreConditionFailedException;
 import factory.ObjectFactory;
@@ -80,12 +81,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(String userId) throws NotFoundException {
-        return users
-                .stream()
-                .filter(user -> user.getId().equals(userId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("User Not Found"));
+    public User getUser(String userId) throws NotFoundException, InternalErrorException {
+        try {
+            return usersRepository.findById(userId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new InternalErrorException();
+        }
     }
 
     @Override
@@ -96,14 +98,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void endorse(UserDto endorsedDto, String skillName)
-            throws NotFoundException, PreConditionFailedException, AlreadyExistsException {
+            throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException {
         User endorsed = getUser(endorsedDto.getId());
         User endorser = getCurrentUser();
         endorsed.endorse(endorser, skillName);
     }
 
     @Override
-    public Set<String> getEndorsedList(String endorser, String endorsed) {
+    public Set<String> getEndorsedList(String endorser, String endorsed) throws InternalErrorException {
         try {
             User endorserUser = getUser(endorser);
             User endorsedUser = getUser(endorsed);
@@ -135,7 +137,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDto(String userId) throws NotFoundException {
+    public UserDto getUserDto(String userId) throws NotFoundException, InternalErrorException {
         return UserDto.of(getUser(userId));
     }
 

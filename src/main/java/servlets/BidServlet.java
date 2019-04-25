@@ -1,10 +1,7 @@
 package servlets;
 
 import dtos.BidDto;
-import exceptions.AccessDeniedException;
-import exceptions.AlreadyExistsException;
-import exceptions.BadRequestException;
-import exceptions.NotFoundException;
+import exceptions.*;
 import factory.ObjectFactory;
 import services.project.ProjectService;
 import services.user.UserService;
@@ -43,11 +40,15 @@ public class BidServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String projectId = req.getParameter("projectId");
-        returnJson(
-                new BidRequestedResponse(
-                        projectService.bidRequested(userService.getCurrentUser().getId(), projectId)
-                ),
-                resp
-        );
+        try {
+            returnJson(
+                    new BidRequestedResponse(
+                            projectService.bidRequested(userService.getCurrentUser().getId(), projectId)
+                    ),
+                    resp
+            );
+        } catch (InternalErrorException e) {
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
+        }
     }
 }

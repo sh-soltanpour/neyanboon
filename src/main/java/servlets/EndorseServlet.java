@@ -1,10 +1,7 @@
 package servlets;
 
 import dtos.UserSkillDto;
-import exceptions.AlreadyExistsException;
-import exceptions.BadRequestException;
-import exceptions.NotFoundException;
-import exceptions.PreConditionFailedException;
+import exceptions.*;
 import factory.ObjectFactory;
 import services.user.UserService;
 import servlets.models.EndorseRequest;
@@ -52,6 +49,8 @@ public class EndorseServlet extends BaseServlet {
             returnError(e.getMessage(), HttpStatus.PRECONDITION_FAILED, resp);
         } catch (AlreadyExistsException e) {
             returnError(e.getMessage(), HttpStatus.CONFLICT, resp);
+        } catch (InternalErrorException e) {
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
         }
     }
 }

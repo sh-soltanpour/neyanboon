@@ -3,10 +3,7 @@ package services.project;
 import client.MetaDataClient;
 import dtos.ProjectDto;
 import entitites.*;
-import exceptions.AccessDeniedException;
-import exceptions.AlreadyExistsException;
-import exceptions.BadRequestException;
-import exceptions.NotFoundException;
+import exceptions.*;
 import factory.ObjectFactory;
 import services.user.UserService;
 
@@ -86,7 +83,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean bidRequested(String userId, String projectId) {
+    public boolean bidRequested(String userId, String projectId) throws InternalErrorException {
         User user;
         try {
             user = userService.getUser(userId);

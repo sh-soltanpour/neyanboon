@@ -4,6 +4,7 @@ import configuration.BasicConnectionPool;
 import configuration.ConnectionPool;
 import entitites.User;
 import entitites.UserSkill;
+import exceptions.NotFoundException;
 import org.sqlite.util.StringUtils;
 
 import java.sql.Connection;
@@ -33,9 +34,11 @@ public class UserSqliteRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findById(String id) throws SQLException {
+    public User findById(String id) throws SQLException, NotFoundException {
         Connection connection = pool.getConnection();
         ResultSet resultSet = connection.prepareStatement(findByIdQuery((id))).executeQuery();
+        if (resultSet.isClosed())
+            throw new NotFoundException();
         return toDomainModel(resultSet);
     }
 
