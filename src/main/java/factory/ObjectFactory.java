@@ -4,6 +4,8 @@ import client.MetaDataClient;
 import feign.Feign;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
+import repositories.skill.SkillRepository;
+import repositories.skill.SkillRepositorySqliteImpl;
 import repositories.user.UserRepository;
 import repositories.user.UserSqliteRepositoryImpl;
 import services.project.ProjectService;
@@ -22,6 +24,7 @@ public class ObjectFactory {
 
     //repositories
     private static UserRepository userRepository;
+    private static SkillRepository skillRepository;
 
 
     public static ProjectService getProjectService() {
@@ -59,5 +62,11 @@ public class ObjectFactory {
         if (userRepository == null)
             userRepository = new UserSqliteRepositoryImpl();
         return userRepository;
+    }
+
+    public static SkillRepository getSkillRepository() {
+        if (skillRepository == null)
+            skillRepository = new SkillRepositorySqliteImpl();
+        return skillRepository;
     }
 }

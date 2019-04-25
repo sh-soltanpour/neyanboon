@@ -2,6 +2,7 @@ package client;
 
 import dtos.ProjectDto;
 import dtos.ProjectSkillDto;
+import entitites.Skill;
 import feign.Headers;
 import feign.RequestLine;
 
@@ -15,5 +16,5 @@ public interface MetaDataClient {
 
     @RequestLine("GET /joboonja/skill")
     @Headers("Content-Type: application/json")
-    List<ProjectSkillDto> getSkills();
+    List<Skill> getSkills();
 }
