@@ -11,6 +11,7 @@ import factory.ObjectFactory;
 import repositories.user.UserRepository;
 import services.skill.SkillService;
 
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,11 @@ public class UserServiceImpl implements UserService {
                 skills,
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );
+        try {
+            usersRepository.save(currentUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         int idCounter = 2;
         for (int i = 0; i < 5; i++) {
             users.add(

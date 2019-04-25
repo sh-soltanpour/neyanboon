@@ -2,25 +2,29 @@ package repositories.user;
 
 import configuration.BasicConnectionPool;
 import configuration.ConnectionPool;
-import configuration.DBCPDataSource;
 import entitites.User;
 import entitites.UserSkill;
+import org.sqlite.util.StringUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserSqliteRepositoryImpl implements UserRepository {
 
     private final String tableName = "users";
+    private final List<String> columns =
+            Arrays.asList("id", "firstName", "lastName", "jobTitle", "profilePictureUrl", "bio");
     private ConnectionPool pool = BasicConnectionPool.getInstance();
 
     public UserSqliteRepositoryImpl() {
         try {
             Connection connection = pool.getConnection();
-            connection.createStatement().executeUpdate(getCreateTable());
+            connection.createStatement().executeUpdate(getCreateTableQuery());
             System.out.println("user table created");
             pool.releaseConnection(connection);
         } catch (SQLException e) {
@@ -36,8 +40,11 @@ public class UserSqliteRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
-
+    public void save(User user) throws SQLException {
+        //TODO: update user skills
+        try (Connection connection = pool.getConnection()) {
+            connection.prepareStatement(insertUserQuery(user)).execute();
+        }
     }
 
     @Override
@@ -53,10 +60,10 @@ public class UserSqliteRepositoryImpl implements UserRepository {
         );
     }
 
-    private String getCreateTable() {
+    private String getCreateTableQuery() {
         return "create table if not exists users\n" +
                 "(\n" +
-                "  id                text,\n" +
+                "  id                text primary key,\n" +
                 "  firstName         text,\n" +
                 "  lastName          text,\n" +
                 "  jobTitle          text,\n" +
@@ -64,6 +71,13 @@ public class UserSqliteRepositoryImpl implements UserRepository {
                 "  bio               text\n" +
                 ");\n";
 
+    }
+
+    private String insertUserQuery(User user) {
+        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%s')", tableName,
+                StringUtils.join(columns, ","), user.getId(),
+                user.getFirstName(), user.getLastName(), user.getJobTitle(), user.getProfilePictureUrl(), user.getBio()
+        );
     }
 
     private String findByIdQuery(String id) {
