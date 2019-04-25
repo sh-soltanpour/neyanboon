@@ -8,6 +8,7 @@ import exceptions.AlreadyExistsException;
 import exceptions.NotFoundException;
 import exceptions.PreConditionFailedException;
 import factory.ObjectFactory;
+import repositories.user.UserRepository;
 import services.skill.SkillService;
 
 import java.util.*;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
     private User currentUser;
     private List<User> users = new ArrayList<>();
     private SkillService skillService = ObjectFactory.getSkillService();
+    private UserRepository usersRepository = ObjectFactory.getUserRepository();
 
     public UserServiceImpl() {
         initialize();

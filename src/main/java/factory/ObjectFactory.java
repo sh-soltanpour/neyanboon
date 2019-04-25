@@ -5,7 +5,7 @@ import feign.Feign;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import repositories.user.UserRepository;
-import repositories.user.UserRepositoryImpl;
+import repositories.user.UserSqliteRepositoryImpl;
 import services.project.ProjectService;
 import services.project.ProjectServiceImpl;
 import services.skill.SkillService;
@@ -57,7 +57,7 @@ public class ObjectFactory {
 
     public static UserRepository getUserRepository() {
         if (userRepository == null)
-            userRepository = new UserRepositoryImpl();
+            userRepository = new UserSqliteRepositoryImpl();
         return userRepository;
     }
 }
