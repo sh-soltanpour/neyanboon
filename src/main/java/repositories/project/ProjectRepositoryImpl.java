@@ -1,26 +1,39 @@
 package repositories.project;
 
 import configuration.BasicConnectionPool;
+import configuration.DBCPDataSource;
 import entitites.Project;
+import entitites.ProjectSkill;
 import org.sqlite.util.StringUtils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ProjectRepositoryImpl extends ProjectRepository {
 
     private List<String> columns = Arrays.asList("id", "title", "description", "imageUrl", "budget", "deadline");
 
+    public ProjectRepositoryImpl() {
+        super();
+        try {
+            execUpdateQueryBatch(createRelationTablesQuery());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void save(Project project) throws SQLException {
-        try (Connection connection = BasicConnectionPool.getInstance().getConnection()) {
-            connection.prepareStatement(insertQuery(project)).execute();
-            BasicConnectionPool.getInstance().releaseConnection(connection);
+        List<String> queries = new ArrayList<>();
+        queries.add(insertQuery(project));
+        queries.addAll(updateSkillsQuery(project));
+        try {
+            execUpdateQueryBatch(queries);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 
@@ -33,9 +46,21 @@ public class ProjectRepositoryImpl extends ProjectRepository {
         );
     }
 
+    private List<String> updateSkillsQuery(Project project) {
+        List<String> result = new ArrayList<>();
+        for (ProjectSkill skill : project.getSkills()) {
+            String query = String.format("replace into %s(%s) values('%s','%s','%s')", "project_skill",
+                    "projectId, skillId, point",
+                    project.getId(), skill.getName(), skill.getPoint()
+            );
+            result.add(query);
+        }
+        return result;
+    }
+
     @Override
     public Project toDomainModel(ResultSet rs) throws SQLException {
-        return new Project(
+        Project project = new Project(
                 rs.getString("id"),
                 rs.getString("title"),
                 rs.getString("description"),
@@ -46,6 +71,23 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 new Date(rs.getLong("deadline")),
                 null
         );
+        project.setSkills(getProjectSkills(project));
+        return project;
+    }
+
+    private List<ProjectSkill> getProjectSkills(Project project) throws SQLException {
+        String query = String.format("select skillId, point from project_skill where projectId = %s", project.getId());
+        ResultSet rs = execQuery(query);
+        List<ProjectSkill> projectSkills = new ArrayList<>();
+        while (rs.next()) {
+            projectSkills.add(
+                    new ProjectSkill(
+                            rs.getString("skillId"),
+                            rs.getInt("point")
+                    )
+            );
+        }
+        return projectSkills;
     }
 
     @Override
@@ -58,6 +100,30 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 "  budget int,\n" +
                 "  deadline int\n" +
                 ");";
+    }
+
+    private List<String> createRelationTablesQuery() {
+        String projectSkill = "create table if not exists project_skill\n" +
+                "(\n" +
+                "  id        text primary key,\n" +
+                "  projectId text,\n" +
+                "  skillId   text,\n" +
+                "  point   int,\n" +
+                "  CONSTRAINT fk_project_skill\n" +
+                "    foreign key (projectId) references projects (id),\n" +
+                "  foreign key (skillId) references skills (id)\n" +
+                ");";
+        String bid = "create table if not exists bid\n" +
+                "(\n" +
+                "  id          text primary key,\n" +
+                "  biddingUser text ,\n" +
+                "  projectId   text,\n" +
+                "  bidAmount   int,\n" +
+                "  constraint fk_bid\n" +
+                "  foreign key (biddingUser) references users(id),\n" +
+                "  foreign key (projectId) references projects(id)\n" +
+                ");";
+        return Arrays.asList(projectSkill, bid);
     }
 
     @Override

@@ -34,10 +34,7 @@ public class ProjectServiceImpl implements ProjectService {
                         .stream()
                         .map(ProjectDto::toProject)
                         .collect(Collectors.toList());
-        int i = 0;
         for (Project project : projects) {
-            if (i++ == 1)
-                return;
             try {
                 projectRepository.save(project);
             } catch (SQLException e) {
@@ -68,10 +65,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> getQualifiedProjects(User user) throws SQLException {
+        System.out.println(projectRepository.findAll().size());
         return projectRepository
                 .findAll()
                 .stream()
-                .filter(project -> isQualified(user, project))
+//                .filter(project -> isQualified(user, project))
                 .map(ProjectDto::of)
                 .collect(Collectors.toList());
     }

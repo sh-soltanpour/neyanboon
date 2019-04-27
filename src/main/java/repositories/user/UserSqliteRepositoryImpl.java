@@ -1,11 +1,8 @@
 package repositories.user;
 
-import configuration.BasicConnectionPool;
-import configuration.ConnectionPool;
-import entitites.Skill;
+import configuration.DBCPDataSource;
 import entitites.User;
 import entitites.UserSkill;
-import exceptions.NotFoundException;
 import org.sqlite.util.StringUtils;
 
 import java.sql.Connection;
@@ -13,23 +10,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserSqliteRepositoryImpl extends UserRepository {
 
     private final List<String> columns =
             Arrays.asList("id", "firstName", "lastName", "jobTitle", "profilePictureUrl", "bio");
-    private ConnectionPool pool = BasicConnectionPool.getInstance();
 
 
     @Override
     public void save(User user) throws SQLException {
         //TODO: update user skills
-        try (Connection connection = pool.getConnection()) {
+        try (Connection connection = DBCPDataSource.getConnection()) {
             connection.prepareStatement(insertUserQuery(user)).execute();
-            pool.releaseConnection(connection);
         }
     }
 

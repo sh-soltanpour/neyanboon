@@ -7,6 +7,7 @@ import exceptions.NotFoundException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,14 +45,23 @@ public abstract class Repository<T, Id> {
     protected ResultSet execQuery(String query) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         ResultSet rs = connection.prepareStatement(query).executeQuery();
-        BasicConnectionPool.getInstance().releaseConnection(connection);
+//        connection.close();
         return rs;
     }
 
     protected void execUpdateQuery(String query) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         connection.prepareStatement(query).execute();
-        BasicConnectionPool.getInstance().releaseConnection(connection);
+        connection.close();
+    }
+
+    protected void execUpdateQueryBatch(List<String> queries) throws SQLException {
+        Connection connection = DBCPDataSource.getConnection();
+        Statement statement = connection.createStatement();
+        for (String query : queries)
+            statement.addBatch(query);
+        statement.executeBatch();
+        connection.close();
     }
 
     private String findAllQuery() {
