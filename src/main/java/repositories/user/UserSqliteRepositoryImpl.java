@@ -23,14 +23,6 @@ public class UserSqliteRepositoryImpl extends UserRepository {
             Arrays.asList("id", "firstName", "lastName", "jobTitle", "profilePictureUrl", "bio");
     private ConnectionPool pool = BasicConnectionPool.getInstance();
 
-    public UserSqliteRepositoryImpl() {
-        this.tableName = "users";
-        try {
-            execQuery(getCreateTableQuery());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void save(User user) throws SQLException {
@@ -53,8 +45,8 @@ public class UserSqliteRepositoryImpl extends UserRepository {
         );
     }
 
-
-    private String getCreateTableQuery() {
+    @Override
+    protected String createTableQuery() {
         return "create table if not exists users\n" +
                 "(\n" +
                 "  id                text primary key,\n" +
@@ -64,18 +56,18 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 "  profilePictureUrl text,\n" +
                 "  bio               text\n" +
                 ");\n";
+    }
 
+    @Override
+    protected String getTableName() {
+        return "users";
     }
 
     private String insertUserQuery(User user) {
-        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%s')", tableName,
+        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%s')", getTableName(),
                 StringUtils.join(columns, ","), user.getId(),
                 user.getFirstName(), user.getLastName(), user.getJobTitle(), user.getProfilePictureUrl(), user.getBio()
         );
     }
 
-
-    private String findByIdQuery(String id) {
-        return String.format("SELECT * FROM %s WHERE ID = %s", tableName, id);
-    }
 }

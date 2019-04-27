@@ -1,7 +1,6 @@
 package repositories;
 
 import configuration.BasicConnectionPool;
-import entitites.User;
 import exceptions.NotFoundException;
 
 import java.sql.Connection;
@@ -11,7 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Repository<T, Id> {
-    protected String tableName;
+
+    public Repository() {
+        try {
+            execUpdateQuery(createTableQuery());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public List<T> findAll() throws SQLException {
@@ -22,6 +28,7 @@ public abstract class Repository<T, Id> {
         }
         return result;
     }
+
     public T findById(Id id) throws SQLException, NotFoundException {
         ResultSet resultSet = execQuery(findByIdQuery(id));
         if (resultSet.isClosed())
@@ -40,12 +47,22 @@ public abstract class Repository<T, Id> {
         return rs;
     }
 
+    protected void execUpdateQuery(String query) throws SQLException {
+        Connection connection = BasicConnectionPool.getInstance().getConnection();
+        connection.prepareStatement(query).execute();
+        BasicConnectionPool.getInstance().releaseConnection(connection);
+    }
+
     private String findAllQuery() {
-        return String.format("SELECT * from %s", tableName);
+        return String.format("SELECT * from %s", getTableName());
     }
 
     private String findByIdQuery(Id id) {
-        return String.format("SELECT * FROM %s where id = '%s", tableName, id);
+        return String.format("SELECT * FROM %s where id = '%s", getTableName(), id);
     }
+
+    protected abstract String createTableQuery();
+
+    protected abstract String getTableName();
 
 }

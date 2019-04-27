@@ -5,8 +5,10 @@ import dtos.ProjectDto;
 import entitites.*;
 import exceptions.*;
 import factory.ObjectFactory;
+import repositories.project.ProjectRepository;
 import services.user.UserService;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ public class ProjectServiceImpl implements ProjectService {
     private HashMap<String, Project> projects;
     private List<Bid> bids = new ArrayList<>();
     private UserService userService = ObjectFactory.getUserService();
+    private ProjectRepository projectRepository = ObjectFactory.getProjectRepository();
 
     public ProjectServiceImpl() {
         initialFetch();
@@ -34,6 +37,13 @@ public class ProjectServiceImpl implements ProjectService {
                                 .map(ProjectDto::toProject)
                                 .collect(Collectors.toMap(Project::getId, project -> project))
                 );
+        projects.values().forEach(project -> {
+            try {
+                projectRepository.save(project);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

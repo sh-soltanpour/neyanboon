@@ -14,17 +14,6 @@ public class SkillRepositorySqliteImpl extends SkillRepository {
 
     private final List<String> columns = Arrays.asList("id", "name");
 
-    public SkillRepositorySqliteImpl() {
-        this.tableName = "skills";
-        Connection connection = BasicConnectionPool.getInstance().getConnection();
-        try {
-            connection.prepareStatement(createTableQuery()).execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            BasicConnectionPool.getInstance().releaseConnection(connection);
-        }
-    }
 
     @Override
     public void save(Skill skill) throws SQLException {
@@ -42,16 +31,22 @@ public class SkillRepositorySqliteImpl extends SkillRepository {
         );
     }
 
-    private String createTableQuery() {
+    @Override
+    protected String createTableQuery() {
         String query = "create table if not exists %s\n" +
                 "(\n" +
                 "  id text primary key,\n" +
                 "  name text unique);";
-        return String.format(query, tableName);
+        return String.format(query, getTableName());
+    }
+
+    @Override
+    protected String getTableName() {
+        return "skills";
     }
 
     private String insertQuery(Skill skill) {
-        return String.format("replace into %s(%s) values('%s','%s')", tableName,
+        return String.format("replace into %s(%s) values('%s','%s')", getTableName(),
                 StringUtils.join(columns, ","), skill.getId(), skill.getName()
         );
     }
