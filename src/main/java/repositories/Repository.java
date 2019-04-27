@@ -1,6 +1,7 @@
 package repositories;
 
 import configuration.BasicConnectionPool;
+import configuration.DBCPDataSource;
 import exceptions.NotFoundException;
 
 import java.sql.Connection;
@@ -41,14 +42,14 @@ public abstract class Repository<T, Id> {
     public abstract T toDomainModel(ResultSet rs) throws SQLException;
 
     protected ResultSet execQuery(String query) throws SQLException {
-        Connection connection = BasicConnectionPool.getInstance().getConnection();
+        Connection connection = DBCPDataSource.getConnection();
         ResultSet rs = connection.prepareStatement(query).executeQuery();
         BasicConnectionPool.getInstance().releaseConnection(connection);
         return rs;
     }
 
     protected void execUpdateQuery(String query) throws SQLException {
-        Connection connection = BasicConnectionPool.getInstance().getConnection();
+        Connection connection = DBCPDataSource.getConnection();
         connection.prepareStatement(query).execute();
         BasicConnectionPool.getInstance().releaseConnection(connection);
     }

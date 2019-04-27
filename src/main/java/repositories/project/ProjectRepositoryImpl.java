@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class ProjectRepositoryImpl extends ProjectRepository {
@@ -18,21 +20,32 @@ public class ProjectRepositoryImpl extends ProjectRepository {
     public void save(Project project) throws SQLException {
         try (Connection connection = BasicConnectionPool.getInstance().getConnection()) {
             connection.prepareStatement(insertQuery(project)).execute();
+            BasicConnectionPool.getInstance().releaseConnection(connection);
         }
     }
 
     private String insertQuery(Project project) {
-        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%s')", getTableName(),
+        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%d')", getTableName(),
                 StringUtils.join(columns, ","),
                 project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(),
                 project.getBudget(),
-                project.getDeadline()
+                project.getDeadline().getTime()
         );
     }
 
     @Override
     public Project toDomainModel(ResultSet rs) throws SQLException {
-        return null;
+        return new Project(
+                rs.getString("id"),
+                rs.getString("title"),
+                rs.getString("description"),
+                rs.getString("imageUrl"),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                rs.getInt("budget"),
+                new Date(rs.getLong("deadline")),
+                null
+        );
     }
 
     @Override
@@ -43,7 +56,7 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 "  description text,\n" +
                 "  imageUrl text,\n" +
                 "  budget int,\n" +
-                "  deadline datetime\n" +
+                "  deadline int\n" +
                 ");";
     }
 

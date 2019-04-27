@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(urlPatterns = {"/projects/bids"})
 public class BidServlet extends BaseServlet {
@@ -34,6 +35,8 @@ public class BidServlet extends BaseServlet {
             returnError("Bid Already Exists", HttpStatus.CONFLICT, resp);
         } catch (BadRequestException e) {
             returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
+        } catch (SQLException e) {
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
         }
     }
 
@@ -47,8 +50,10 @@ public class BidServlet extends BaseServlet {
                     ),
                     resp
             );
-        } catch (InternalErrorException e) {
+        } catch (InternalErrorException | SQLException e) {
             returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
+        } catch (NotFoundException e) {
+            returnError(e.getMessage(), HttpStatus.NOTFOUND, resp);
         }
     }
 }

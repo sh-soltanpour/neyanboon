@@ -29,6 +29,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
         //TODO: update user skills
         try (Connection connection = pool.getConnection()) {
             connection.prepareStatement(insertUserQuery(user)).execute();
+            pool.releaseConnection(connection);
         }
     }
 

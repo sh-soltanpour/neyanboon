@@ -1,5 +1,6 @@
 package entitites;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class Project {
     private String title;
     private String description;
     private String imageUrl;
-    private List<ProjectSkill> skills;
+    private List<ProjectSkill> skills = Collections.emptyList();
     private List<Bid> bids;
     private int budget;
     private Date deadline;

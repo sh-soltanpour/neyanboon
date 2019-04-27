@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,8 +23,14 @@ public class ProjectListServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User user = userService.getCurrentUser();
-        List<ProjectDto> projects = projectService.getQualifiedProjects(user);
-        returnJson(projects, resp);
+        try {
+            User user = userService.getCurrentUser();
+            List<ProjectDto> projects = projectService.getQualifiedProjects(user);
+            returnJson(projects, resp);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
+        }
+
     }
 }

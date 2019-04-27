@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class ProjectServiceImpl implements ProjectService {
 
     private MetaDataClient metaDataClient = ObjectFactory.getMetaDataClient();
-    private HashMap<String, Project> projects;
     private List<Bid> bids = new ArrayList<>();
     private UserService userService = ObjectFactory.getUserService();
     private ProjectRepository projectRepository = ObjectFactory.getProjectRepository();
@@ -29,21 +28,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void initialFetch() {
-        projects = new HashMap<>
-                (
-                        metaDataClient
-                                .getProjects()
-                                .stream()
-                                .map(ProjectDto::toProject)
-                                .collect(Collectors.toMap(Project::getId, project -> project))
-                );
-        projects.values().forEach(project -> {
+        List<Project> projects =
+                metaDataClient
+                        .getProjects()
+                        .stream()
+                        .map(ProjectDto::toProject)
+                        .collect(Collectors.toList());
+        int i = 0;
+        for (Project project : projects) {
+            if (i++ == 1)
+                return;
             try {
                 projectRepository.save(project);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        });
+        }
     }
 
     @Override
@@ -52,13 +52,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectDto getProject(String projectId) {
-        return ProjectDto.of(projects.get(projectId));
+    public ProjectDto getProject(String projectId) throws NotFoundException, SQLException {
+        return ProjectDto.of(projectRepository.findById(projectId));
     }
 
     @Override
-    public ProjectDto getProject(User user, String projectId) throws NotFoundException, AccessDeniedException {
-        Project project = projects.get(projectId);
+    public ProjectDto getProject(User user, String projectId) throws NotFoundException, AccessDeniedException, SQLException {
+        Project project = projectRepository.findById(projectId);
         if (project == null)
             throw new NotFoundException();
         else if (!isQualified(user, project))
@@ -67,9 +67,9 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getQualifiedProjects(User user) {
-        return projects
-                .values()
+    public List<ProjectDto> getQualifiedProjects(User user) throws SQLException {
+        return projectRepository
+                .findAll()
                 .stream()
                 .filter(project -> isQualified(user, project))
                 .map(ProjectDto::of)
@@ -78,8 +78,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public void addBidRequest(String projectId, User user, int amount)
-            throws NotFoundException, AccessDeniedException, AlreadyExistsException, BadRequestException {
-        Project project = projects.get(projectId);
+            throws NotFoundException, AccessDeniedException, AlreadyExistsException, BadRequestException, SQLException {
+        Project project = projectRepository.findById(projectId);
         if (project == null)
             throw new NotFoundException();
         if (amount > project.getBudget())
@@ -93,14 +93,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean bidRequested(String userId, String projectId) throws InternalErrorException {
+    public boolean bidRequested(String userId, String projectId) throws InternalErrorException, NotFoundException, SQLException {
         User user;
         try {
             user = userService.getUser(userId);
         } catch (NotFoundException e) {
             user = null;
         }
-        Project project = projects.get(projectId);
+        Project project = projectRepository.findById(projectId);
         if (project == null || user == null)
             return false;
         return findBid(user, project) != null;

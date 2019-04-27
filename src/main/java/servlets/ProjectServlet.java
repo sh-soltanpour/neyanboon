@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +34,8 @@ public class ProjectServlet extends BaseServlet {
             returnError("Access Denied", HttpStatus.ACCESSDENIED, resp);
         } catch (NotFoundException e) {
             returnError("Not Found", HttpStatus.NOTFOUND, resp);
+        } catch (SQLException e) {
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
         }
     }
 }
