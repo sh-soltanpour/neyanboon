@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .filter(skillDto -> skillDto.getName().equals(skillName))
                 .findFirst()
+                .map(ProjectSkill::of)
                 .orElseThrow(NotFoundException::new);
     }
 

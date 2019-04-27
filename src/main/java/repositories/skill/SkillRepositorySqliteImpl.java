@@ -2,7 +2,6 @@ package repositories.skill;
 
 import configuration.BasicConnectionPool;
 import entitites.Skill;
-import exceptions.NotFoundException;
 import org.sqlite.util.StringUtils;
 
 import java.sql.Connection;
@@ -10,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 public class SkillRepositorySqliteImpl extends SkillRepository {
 
@@ -30,21 +28,18 @@ public class SkillRepositorySqliteImpl extends SkillRepository {
 
     @Override
     public void save(Skill skill) throws SQLException {
-        if (skill.getId() == null)
-            skill.setId(UUID.randomUUID().toString());
+        skill.setId(skill.getName());//TODO: change id
         Connection connection = BasicConnectionPool.getInstance().getConnection();
         connection.prepareStatement(insertQuery(skill)).execute();
         BasicConnectionPool.getInstance().releaseConnection(connection);
     }
 
     @Override
-    public Skill findById(String s) throws SQLException, NotFoundException {
-        return null;
-    }
-
-    @Override
     public Skill toDomainModel(ResultSet rs) throws SQLException {
-        return null;
+        return new Skill(
+                rs.getString(1),
+                rs.getString(2)
+        );
     }
 
     private String createTableQuery() {

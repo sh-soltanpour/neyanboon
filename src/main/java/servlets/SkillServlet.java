@@ -15,7 +15,7 @@ public class SkillServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        returnJson(skillService.getSkillsDto(), resp);
+        returnJson(skillService.getSkills(), resp);
     }
 
 

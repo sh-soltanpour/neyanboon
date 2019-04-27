@@ -1,13 +1,12 @@
 package services.skill;
 
-import dtos.ProjectSkillDto;
-import entitites.ProjectSkill;
+import entitites.Skill;
 import factory.ObjectFactory;
 import repositories.skill.SkillRepository;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SkillServiceImpl implements SkillService {
     private SkillRepository skillsRepository = ObjectFactory.getSkillRepository();
@@ -29,13 +28,12 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public List<ProjectSkillDto> getSkillsDto() {
-//        return skills.stream().map(ProjectSkillDto::of).collect(Collectors.toList());
-        return null;
-    }
-
-    @Override
-    public List<ProjectSkill> getSkills() {
-        return null;
+    public List<Skill> getSkills() {
+        try {
+            return skillsRepository.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 }

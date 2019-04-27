@@ -33,14 +33,6 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     }
 
     @Override
-    public User findById(String id) throws SQLException, NotFoundException {
-        ResultSet resultSet = execQuery(findByIdQuery(id));
-        if (resultSet.isClosed())
-            throw new NotFoundException();
-        return toDomainModel(resultSet);
-    }
-
-    @Override
     public void save(User user) throws SQLException {
         //TODO: update user skills
         try (Connection connection = pool.getConnection()) {

@@ -1,12 +1,11 @@
 package services.skill;
 
-import dtos.ProjectSkillDto;
-import entitites.ProjectSkill;
+import entitites.Skill;
 
 import java.util.List;
 
 public interface SkillService {
-    List<ProjectSkillDto> getSkillsDto();
-    List<ProjectSkill> getSkills();
+    List<Skill> getSkills();
+
     void initialize();
 }

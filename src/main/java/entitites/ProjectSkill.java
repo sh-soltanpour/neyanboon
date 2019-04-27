@@ -15,6 +15,10 @@ public class ProjectSkill {
         this.point = point;
     }
 
+    public static ProjectSkill of(Skill skill) {
+        return new ProjectSkill(skill.getName(), 0);
+    }
+
     public String getName() {
         return name;
     }

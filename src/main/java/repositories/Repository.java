@@ -13,7 +13,6 @@ import java.util.List;
 public abstract class Repository<T, Id> {
     protected String tableName;
 
-    public abstract T findById(Id id) throws SQLException, NotFoundException;
 
     public List<T> findAll() throws SQLException {
         ResultSet rs = execQuery(findAllQuery());
@@ -22,6 +21,12 @@ public abstract class Repository<T, Id> {
             result.add(toDomainModel(rs));
         }
         return result;
+    }
+    public T findById(Id id) throws SQLException, NotFoundException {
+        ResultSet resultSet = execQuery(findByIdQuery(id));
+        if (resultSet.isClosed())
+            throw new NotFoundException();
+        return toDomainModel(resultSet);
     }
 
     public abstract void save(T t) throws SQLException;
@@ -37,6 +42,10 @@ public abstract class Repository<T, Id> {
 
     private String findAllQuery() {
         return String.format("SELECT * from %s", tableName);
+    }
+
+    private String findByIdQuery(Id id) {
+        return String.format("SELECT * FROM %s where id = '%s", tableName, id);
     }
 
 }
