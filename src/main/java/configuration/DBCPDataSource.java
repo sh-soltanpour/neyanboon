@@ -13,9 +13,9 @@ public class DBCPDataSource {
         ds.setUrl("jdbc:sqlite:./neyanboon.db");
 //        ds.setUsername("user");
 //        ds.setPassword("password");
-        ds.setMinIdle(5);
-        ds.setMaxIdle(10);
-        ds.setMaxOpenPreparedStatements(100);
+        ds.setMinIdle(50);
+        ds.setMaxIdle(500);
+        ds.setMaxOpenPreparedStatements(1000);
     }
 
     public static Connection getConnection() throws SQLException {

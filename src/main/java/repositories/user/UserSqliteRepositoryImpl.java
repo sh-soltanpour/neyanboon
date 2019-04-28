@@ -21,9 +21,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     @Override
     public void save(User user) throws SQLException {
         //TODO: update user skills
-        try (Connection connection = DBCPDataSource.getConnection()) {
-            connection.prepareStatement(insertUserQuery(user)).execute();
-        }
+        execQuery(insertUserQuery(user));
     }
 
     @Override

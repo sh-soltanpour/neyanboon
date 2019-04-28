@@ -1,6 +1,5 @@
 package repositories;
 
-import configuration.BasicConnectionPool;
 import configuration.DBCPDataSource;
 import exceptions.NotFoundException;
 
@@ -23,30 +22,35 @@ public abstract class Repository<T, Id> {
 
 
     public List<T> findAll() throws SQLException {
-        ResultSet rs = execQuery(findAllQuery());
+        Connection connection = DBCPDataSource.getConnection();
+        ResultSet rs = connection.prepareStatement(findAllQuery()).executeQuery();
         List<T> result = new ArrayList<>();
         while (rs.next()) {
             result.add(toDomainModel(rs));
         }
+        rs.close();
+        connection.close();
         return result;
     }
 
     public T findById(Id id) throws SQLException, NotFoundException {
-        ResultSet resultSet = execQuery(findByIdQuery(id));
+        QueryExecResponse response = execQuery(findByIdQuery(id));
+        ResultSet resultSet = response.getResultSet();
         if (resultSet.isClosed())
             throw new NotFoundException();
-        return toDomainModel(resultSet);
+        T model = toDomainModel(resultSet);
+        response.close();
+        return model;
     }
 
     public abstract void save(T t) throws SQLException;
 
     public abstract T toDomainModel(ResultSet rs) throws SQLException;
 
-    protected ResultSet execQuery(String query) throws SQLException {
+    protected QueryExecResponse execQuery(String query) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         ResultSet rs = connection.prepareStatement(query).executeQuery();
-//        connection.close();
-        return rs;
+        return QueryExecResponse.of(connection,rs);
     }
 
     protected void execUpdateQuery(String query) throws SQLException {

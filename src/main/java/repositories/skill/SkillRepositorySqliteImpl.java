@@ -18,9 +18,7 @@ public class SkillRepositorySqliteImpl extends SkillRepository {
     @Override
     public void save(Skill skill) throws SQLException {
         skill.setId(skill.getName());//TODO: change id
-        Connection connection = BasicConnectionPool.getInstance().getConnection();
-        connection.prepareStatement(insertQuery(skill)).execute();
-        BasicConnectionPool.getInstance().releaseConnection(connection);
+        execUpdateQuery(insertQuery(skill));
     }
 
     @Override

@@ -5,6 +5,7 @@ import configuration.DBCPDataSource;
 import entitites.Project;
 import entitites.ProjectSkill;
 import org.sqlite.util.StringUtils;
+import repositories.QueryExecResponse;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -76,8 +77,9 @@ public class ProjectRepositoryImpl extends ProjectRepository {
     }
 
     private List<ProjectSkill> getProjectSkills(Project project) throws SQLException {
-        String query = String.format("select skillId, point from project_skill where projectId = %s", project.getId());
-        ResultSet rs = execQuery(query);
+        String query = String.format("select skillId, point from project_skill where projectId = '%s'", project.getId());
+        QueryExecResponse response = execQuery(query);
+        ResultSet rs = response.getResultSet();
         List<ProjectSkill> projectSkills = new ArrayList<>();
         while (rs.next()) {
             projectSkills.add(
@@ -87,6 +89,7 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                     )
             );
         }
+        response.close();
         return projectSkills;
     }
 
@@ -112,6 +115,7 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 "  CONSTRAINT fk_project_skill\n" +
                 "    foreign key (projectId) references projects (id),\n" +
                 "  foreign key (skillId) references skills (id)\n" +
+                "  UNIQUE(projectId,skillId) " +
                 ");";
         String bid = "create table if not exists bid\n" +
                 "(\n" +

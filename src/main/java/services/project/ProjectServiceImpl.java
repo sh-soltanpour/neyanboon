@@ -65,11 +65,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> getQualifiedProjects(User user) throws SQLException {
-        System.out.println(projectRepository.findAll().size());
+
         return projectRepository
                 .findAll()
                 .stream()
-//                .filter(project -> isQualified(user, project))
+                .filter(project -> isQualified(user, project))
                 .map(ProjectDto::of)
                 .collect(Collectors.toList());
     }
@@ -118,6 +118,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     private boolean isQualified(User user, Project project) {
+        if (true)
+            return true;
         for (ProjectSkill requiredSkill : project.getSkills()) {
             UserSkill userSkill = user
                     .getSkills()
