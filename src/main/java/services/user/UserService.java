@@ -21,7 +21,7 @@ public interface UserService {
     void addSkill(String skillName, User currentUser) throws NotFoundException, AlreadyExistsException, SQLException;
     void deleteSkill(String skillName, User currentUser) throws NotFoundException, SQLException;
 
-    void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException;
+    void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException, SQLException;
 
     Set<String> getEndorsedList(String endorser, String endorsed) throws InternalErrorException;
 }

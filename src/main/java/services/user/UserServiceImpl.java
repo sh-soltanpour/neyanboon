@@ -68,11 +68,13 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
             }
         }));
-        try {
-            usersRepository.save(currentUser);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        users.forEach(user -> {
+            try {
+                usersRepository.save(user);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -99,10 +101,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void endorse(UserDto endorsedDto, String skillName)
-            throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException {
+            throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException, SQLException {
         User endorsed = getUser(endorsedDto.getId());
         User endorser = getCurrentUser();
         endorsed.endorse(endorser, skillName);
+        usersRepository.save(endorsed);
     }
 
     @Override

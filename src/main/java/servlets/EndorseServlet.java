@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collector;
@@ -49,7 +50,7 @@ public class EndorseServlet extends BaseServlet {
             returnError(e.getMessage(), HttpStatus.PRECONDITION_FAILED, resp);
         } catch (AlreadyExistsException e) {
             returnError(e.getMessage(), HttpStatus.CONFLICT, resp);
-        } catch (InternalErrorException e) {
+        } catch (InternalErrorException | SQLException e) {
             returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
         }
     }
