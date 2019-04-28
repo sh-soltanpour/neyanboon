@@ -105,6 +105,24 @@ public class UserSqliteRepositoryImpl extends UserRepository {
             result.add(new UserSkill(rs.getString("skillId")));
         }
         response.close();
+        for (UserSkill userSkill : result) {
+            userSkill.setEndorsers(getSkillEndorsers(user, userSkill));
+        }
+        return result;
+    }
+
+    private List<User> getSkillEndorsers(User user, UserSkill userSkill) throws SQLException {
+        String query = String.format(
+                "select endorser from endorse where endorsed = '%s' and skillId = '%s' ",
+                user.getId(), userSkill.getName()
+        );
+        QueryExecResponse response = execQuery(query);
+        ResultSet rs = response.getResultSet();
+        List<User> result = new ArrayList<>();
+        while (rs.next()) {
+            result.add(new User(rs.getString("endorser")));
+        }
+        response.close();
         return result;
     }
 

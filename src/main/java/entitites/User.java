@@ -28,6 +28,10 @@ public class User {
             this.skills = skills;
     }
 
+    public User(String id) {
+        this.id = id;
+    }
+
     public List<UserSkill> getSkills() {
         return skills;
     }
@@ -109,7 +113,7 @@ public class User {
     }
 
     public void deleteSkill(String skillName) throws NotFoundException {
-        if(!hasSkill(skillName))
+        if (!hasSkill(skillName))
             throw new NotFoundException("Skill Not Found");
         skills.removeIf(skill -> skill.getName().equals(skillName));
     }

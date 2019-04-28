@@ -13,6 +13,10 @@ public class UserSkill {
         return endorsedBy;
     }
 
+    public void setEndorsers(List<User> endorsers) {
+        this.endorsedBy = endorsers;
+    }
+
     private List<User> endorsedBy;
 
 
