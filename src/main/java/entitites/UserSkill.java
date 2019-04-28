@@ -8,6 +8,11 @@ import java.util.List;
 public class UserSkill {
     //TODO: remove point, change name to UserSkill
     private String name;
+
+    public List<User> getEndorsers() {
+        return endorsedBy;
+    }
+
     private List<User> endorsedBy;
 
 
@@ -37,7 +42,6 @@ public class UserSkill {
     public int getPoints() {
         return endorsedBy.size();
     }
-    
 
 
 }

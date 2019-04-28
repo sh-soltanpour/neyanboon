@@ -43,11 +43,6 @@ public class UserServiceImpl implements UserService {
                 skills,
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );
-        try {
-            usersRepository.save(currentUser);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         int idCounter = 2;
         for (int i = 0; i < 5; i++) {
             users.add(
@@ -73,6 +68,11 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
             }
         }));
+        try {
+            usersRepository.save(currentUser);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

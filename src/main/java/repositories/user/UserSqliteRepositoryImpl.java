@@ -9,10 +9,7 @@ import repositories.QueryExecResponse;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserSqliteRepositoryImpl extends UserRepository {
@@ -55,6 +52,29 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                         .map(userSkill -> String.format("replace into %s(%s) values('%s','%s')", "user_skill",
                                 "skillId, userId", userSkill.getName(), user.getId())
                         ).collect(Collectors.toList())
+        );
+        queries.addAll(updateEndorses(user));
+        return queries;
+    }
+
+    private List<String> updateEndorses(User user) {
+        String commaSeperatedSkills =
+                user.getSkills().stream().map(UserSkill::getName)
+                        .map(name -> String.format("'%s'", name))
+                        .collect(Collectors.joining(","));
+        String deleteEndorses = String.format("delete from endorse where endorsed = '%s' and skillId not in (%s)",
+                user.getId(), commaSeperatedSkills);
+        List<String> queries = new ArrayList<>();
+        queries.add(deleteEndorses);
+        queries.addAll(
+                user.getSkills()
+                        .stream()
+                        .map(userSkill ->
+                                userSkill.getEndorsers().stream().map(endorser ->
+                                        String.format("replace into %s(%s) values('%s','%s','%s')", "endorse",
+                                                "endorsed, endorser, skillId", user.getId(), endorser.getId(), userSkill.getName())
+                                ).collect(Collectors.toList())
+                        ).flatMap(Collection::stream).collect(Collectors.toList())
         );
         return queries;
     }
@@ -110,7 +130,18 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 "                       foreign key (skillId) references skills(id),\n" +
                 "  UNIQUE(userId,skillId)\n" +
                 ");";
-        return Collections.singletonList(userSkillTable);
+        String endorseTable = "create table if not exists endorse(\n" +
+                "  endorser text,\n" +
+                "  endorsed text,\n" +
+                "  skillId text,\n" +
+                "  constraint endorse_fk\n" +
+                "                    foreign key (endorser) references users(id),\n" +
+                "                    foreign key (endorsed) references users(id),\n" +
+                "                    foreign key (skillId) references skills(id),\n" +
+                "                    unique (endorsed,endorsed,skillId)\n" +
+                "                    \n" +
+                ");";
+        return Arrays.asList(userSkillTable, endorseTable);
     }
 
     @Override
