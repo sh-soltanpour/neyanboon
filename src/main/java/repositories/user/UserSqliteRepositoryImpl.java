@@ -41,11 +41,22 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     }
 
     private List<String> updateUserSkillsQuery(User user) {
-        return user.getSkills()
-                .stream()
-                .map(userSkill -> String.format("replace into %s(%s) values('%s','%s')", "user_skill",
-                        "skillId, userId", userSkill.getName(), user.getId())
-                ).collect(Collectors.toList());
+        String commaSeperatedSkills =
+                user.getSkills().stream().map(UserSkill::getName)
+                        .map(name -> String.format("'%s'", name))
+                        .collect(Collectors.joining(","));
+        String deleteSkills = String.format("delete from user_skill where userId = '%s' and skillId not in (%s)",
+                user.getId(), commaSeperatedSkills);
+        List<String> queries = new ArrayList<>();
+        queries.add(deleteSkills);
+        queries.addAll(
+                user.getSkills()
+                        .stream()
+                        .map(userSkill -> String.format("replace into %s(%s) values('%s','%s')", "user_skill",
+                                "skillId, userId", userSkill.getName(), user.getId())
+                        ).collect(Collectors.toList())
+        );
+        return queries;
     }
 
     @Override
@@ -56,7 +67,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 rs.getString(3),
                 rs.getString(4),
                 rs.getString(5),
-                new ArrayList<UserSkill>(), //TODO: include valid UserSkills
+                Collections.emptyList(),
                 rs.getString(6)
         );
         user.setSkills(getUserSkills(user));

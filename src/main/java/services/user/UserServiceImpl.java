@@ -91,8 +91,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteSkill(String skillName, User currentUser) throws NotFoundException {
+    public void deleteSkill(String skillName, User currentUser) throws NotFoundException, SQLException {
         currentUser.deleteSkill(skillName);
+        usersRepository.save(currentUser);
     }
 
 
@@ -122,10 +123,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addSkill(String skillName, User currentUser) throws NotFoundException, AlreadyExistsException {
+    public void addSkill(String skillName, User currentUser)
+            throws NotFoundException, AlreadyExistsException, SQLException {
         ProjectSkill newSkill = findSkill(skillName);
-
         currentUser.addSkill(newSkill.getName());
+        usersRepository.save(currentUser);
     }
 
     private ProjectSkill findSkill(String skillName) throws NotFoundException {

@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @WebServlet("/users/skills")
@@ -37,6 +38,8 @@ public class UserSkillServlet extends BaseServlet {
             returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
         } catch (AlreadyExistsException e) {
             returnError(e.getMessage(), HttpStatus.CONFLICT, resp);
+        } catch (SQLException e) {
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
         }
     }
 
@@ -52,6 +55,8 @@ public class UserSkillServlet extends BaseServlet {
             returnError("Skill Not Found", HttpStatus.NOTFOUND, resp);
         } catch (BadRequestException e) {
             returnError(e.getMessage(), HttpStatus.BAD_REQUEST, resp);
+        } catch (SQLException e) {
+            returnError(e.getMessage(), HttpStatus.INTERNAL_SERVER, resp);
         }
     }
 }
