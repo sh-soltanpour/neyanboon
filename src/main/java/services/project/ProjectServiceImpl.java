@@ -5,22 +5,20 @@ import dtos.ProjectDto;
 import entitites.*;
 import exceptions.*;
 import factory.ObjectFactory;
+import repositories.bid.BidRepository;
 import repositories.project.ProjectRepository;
 import services.user.UserService;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ProjectServiceImpl implements ProjectService {
 
     private MetaDataClient metaDataClient = ObjectFactory.getMetaDataClient();
-    private List<Bid> bids = new ArrayList<>();
     private UserService userService = ObjectFactory.getUserService();
     private ProjectRepository projectRepository = ObjectFactory.getProjectRepository();
+    private BidRepository bidRepository = ObjectFactory.getBidRepository();
 
     public ProjectServiceImpl() {
         initialFetch();
@@ -84,10 +82,10 @@ public class ProjectServiceImpl implements ProjectService {
             throw new BadRequestException("Entered amount is not valid");
         if (!isQualified(user, project))
             throw new AccessDeniedException();
-        if (findBid(user, project) != null)
+        if (findBid(user, project))
             throw new AlreadyExistsException("bid already exists");
         Bid bid = new Bid(user, project, amount);
-        bids.add(bid);
+        bidRepository.save(bid);
     }
 
     @Override
@@ -101,20 +99,12 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(projectId);
         if (project == null || user == null)
             return false;
-        return findBid(user, project) != null;
+        return findBid(user, project);
     }
 
 
-    private Bid findBid(User user, Project project) {
-        return bids
-                .stream()
-                .filter
-                        (bid ->
-                                bid.getBiddingUser().getId().equals(user.getId()) &&
-                                        bid.getProject().getId().equals(project.getId())
-                        )
-                .findFirst()
-                .orElse(null);
+    private Boolean findBid(User user, Project project) throws SQLException {
+        return bidRepository.bidExists(project.getId(), user.getId());
     }
 
     private boolean isQualified(User user, Project project) {

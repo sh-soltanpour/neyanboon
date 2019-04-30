@@ -18,6 +18,10 @@ public class Project {
     public Project() {
     }
 
+    public Project(String id) {
+        this.id = id;
+    }
+
     public Project(String id, String title, String description, String imageUrl, List<ProjectSkill> skills, List<Bid> bids, int budget, Date deadline, User winner) {
         this.id = id;
         this.title = title;

@@ -10,6 +10,8 @@ import repositories.skill.SkillRepository;
 import repositories.skill.SkillRepositorySqliteImpl;
 import repositories.user.UserRepository;
 import repositories.user.UserSqliteRepositoryImpl;
+import repositories.bid.BidRepository;
+import repositories.bid.BidRepositoryImpl;
 import services.project.ProjectService;
 import services.project.ProjectServiceImpl;
 import services.skill.SkillService;
@@ -28,6 +30,7 @@ public class ObjectFactory {
     private static UserRepository userRepository;
     private static SkillRepository skillRepository;
     private static ProjectRepository projectRepository;
+    private static BidRepository bidRepository;
 
 
     public static ProjectService getProjectService() {
@@ -77,5 +80,11 @@ public class ObjectFactory {
         if (projectRepository == null)
             projectRepository = new ProjectRepositoryImpl();
         return projectRepository;
+    }
+
+    public static BidRepository getBidRepository() {
+        if (bidRepository == null)
+            bidRepository = new BidRepositoryImpl();
+        return bidRepository;
     }
 }
