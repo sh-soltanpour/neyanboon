@@ -18,6 +18,8 @@ public interface ProjectService {
 
     List<ProjectDto> getQualifiedProjects(User user) throws SQLException;
 
+    List<ProjectDto> getQualifiedProjectsPaginated(User user, int pageNumber, int pageSize) throws SQLException;
+
     void addBidRequest(String projectId, User user, int amount)
             throws NotFoundException, AccessDeniedException, AlreadyExistsException, BadRequestException, SQLException;
 

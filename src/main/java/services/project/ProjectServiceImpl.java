@@ -74,6 +74,16 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<ProjectDto> getQualifiedProjectsPaginated(User user, int pageNumber, int pageSize) throws SQLException {
+        return projectRepository
+                .findAllPaginated(pageNumber, pageSize, "creationDate")
+                .stream()
+//                .filter(project -> isQualified(user, project))
+                .map(ProjectDto::of)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void addBidRequest(String projectId, User user, int amount)
             throws NotFoundException, AccessDeniedException, AlreadyExistsException, BadRequestException, SQLException {
         Project project = projectRepository.findById(projectId);

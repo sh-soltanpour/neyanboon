@@ -24,6 +24,16 @@ public abstract class Repository<T, Id> {
     public List<T> findAll() throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         ResultSet rs = connection.prepareStatement(findAllQuery()).executeQuery();
+        return ResultSetToList(connection, rs);
+    }
+
+    public List<T> findAllPaginated(int pageNumber, int pageSize, String orderBy) throws SQLException {
+        Connection connection = DBCPDataSource.getConnection();
+        ResultSet rs = connection.prepareStatement(findAllPaginatedQuery(pageSize, pageNumber, orderBy)).executeQuery();
+        return ResultSetToList(connection, rs);
+    }
+
+    private List<T> ResultSetToList(Connection connection, ResultSet rs) throws SQLException {
         List<T> result = new ArrayList<>();
         while (rs.next()) {
             result.add(toDomainModel(rs));
@@ -50,7 +60,7 @@ public abstract class Repository<T, Id> {
     protected QueryExecResponse execQuery(String query) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         ResultSet rs = connection.prepareStatement(query).executeQuery();
-        return QueryExecResponse.of(connection,rs);
+        return QueryExecResponse.of(connection, rs);
     }
 
     protected void execUpdateQuery(String query) throws SQLException {
@@ -70,6 +80,11 @@ public abstract class Repository<T, Id> {
 
     private String findAllQuery() {
         return String.format("SELECT * from %s", getTableName());
+    }
+
+    private String findAllPaginatedQuery(int pageSize, int pageNumber, String orderBy) {
+        return String.format("SELECT * from %s order by %s desc limit %d,%d"
+                , getTableName(), orderBy, pageNumber * pageSize, pageSize);
     }
 
     private String findByIdQuery(Id id) {

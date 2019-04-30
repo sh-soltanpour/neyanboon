@@ -24,8 +24,14 @@ public class ProjectListServlet extends BaseServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
+            int pageNumber = 0;
+            int pageSize = 10;
+            if (req.getParameter("pageNumber") != null)
+                pageNumber = Integer.valueOf(req.getParameter("pageNumber"));
+            if (req.getParameter("pageSize") != null)
+                pageSize = Integer.valueOf(req.getParameter("pageSize"));
             User user = userService.getCurrentUser();
-            List<ProjectDto> projects = projectService.getQualifiedProjects(user);
+            List<ProjectDto> projects = projectService.getQualifiedProjectsPaginated(user, pageNumber, pageSize);
             returnJson(projects, resp);
         } catch (SQLException e) {
             e.printStackTrace();
