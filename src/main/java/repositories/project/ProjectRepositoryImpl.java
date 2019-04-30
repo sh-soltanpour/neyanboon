@@ -14,7 +14,7 @@ import java.util.*;
 
 public class ProjectRepositoryImpl extends ProjectRepository {
 
-    private List<String> columns = Arrays.asList("id", "title", "description", "imageUrl", "budget", "deadline");
+    private List<String> columns = Arrays.asList("id", "title", "description", "imageUrl", "budget", "deadline", "creationDate");
 
     public ProjectRepositoryImpl() {
         super();
@@ -39,11 +39,12 @@ public class ProjectRepositoryImpl extends ProjectRepository {
     }
 
     private String insertQuery(Project project) {
-        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%d')", getTableName(),
+        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%d', '%d')", getTableName(),
                 StringUtils.join(columns, ","),
                 project.getId(), project.getTitle(), project.getDescription(), project.getImageUrl(),
                 project.getBudget(),
-                project.getDeadline().getTime()
+                project.getDeadline().getTime(),
+                project.getCreationDate().getTime()
         );
     }
 
@@ -70,6 +71,7 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 Collections.emptyList(),
                 rs.getInt("budget"),
                 new Date(rs.getLong("deadline")),
+                new Date(rs.getLong("creationDate")),
                 null
         );
         project.setSkills(getProjectSkills(project));
@@ -101,7 +103,8 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 "  description text,\n" +
                 "  imageUrl text,\n" +
                 "  budget int,\n" +
-                "  deadline int\n" +
+                "  deadline int,\n" +
+                "  creationDate int\n" +
                 ");";
     }
 

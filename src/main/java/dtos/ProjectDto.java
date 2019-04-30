@@ -13,6 +13,9 @@ public class ProjectDto {
     private List<ProjectSkillDto> skills;
     private int budget;
     private Date deadline;
+
+
+    private Date creationDate;
     private String imageUrl;
     private String description;
 
@@ -29,17 +32,19 @@ public class ProjectDto {
                 project.getSkills().stream().map(ProjectSkillDto::of).collect(Collectors.toList()),
                 project.getBudget(),
                 project.getDeadline(),
+                project.getCreationDate(),
                 project.getImageUrl(),
                 project.getDescription()
         );
     }
 
-    private ProjectDto(String id, String title, List<ProjectSkillDto> skills, int budget, Date deadline, String imageUrl, String description) {
+    private ProjectDto(String id, String title, List<ProjectSkillDto> skills, int budget, Date deadline, Date creationDate, String imageUrl, String description) {
         this.id = id;
         this.title = title;
         this.skills = skills;
         this.budget = budget;
         this.deadline = deadline;
+        this.creationDate = creationDate;
         this.imageUrl = imageUrl;
         this.description = description;
     }
@@ -54,6 +59,7 @@ public class ProjectDto {
                 Collections.emptyList(),
                 budget,
                 deadline,
+                creationDate,
                 null
         );
     }
@@ -112,5 +118,9 @@ public class ProjectDto {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 }

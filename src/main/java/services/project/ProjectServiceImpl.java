@@ -21,11 +21,12 @@ public class ProjectServiceImpl implements ProjectService {
     private BidRepository bidRepository = ObjectFactory.getBidRepository();
 
     public ProjectServiceImpl() {
-        initialFetch();
+        fetchProjects();
     }
 
     @Override
-    public void initialFetch() {
+    public void fetchProjects() {
+        System.out.println("Fetching projects started");
         List<Project> projects =
                 metaDataClient
                         .getProjects()

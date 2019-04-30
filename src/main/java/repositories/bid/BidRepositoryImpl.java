@@ -23,7 +23,7 @@ public class BidRepositoryImpl extends BidRepository {
 
     @Override
     protected String createTableQuery() {
-        return "create table bid\n" +
+        return "create table if not exists bid\n" +
                 "(\n" +
                 "  biddingUser text,\n" +
                 "  projectId   text,\n" +

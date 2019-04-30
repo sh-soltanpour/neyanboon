@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ProjectService {
-    void initialFetch();
+    void fetchProjects();
 
     List<ProjectDto> getProjects();
 

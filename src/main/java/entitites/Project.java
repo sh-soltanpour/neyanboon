@@ -13,6 +13,7 @@ public class Project {
     private List<Bid> bids;
     private int budget;
     private Date deadline;
+    private Date creationDate;
     private User winner;
 
     public Project() {
@@ -22,7 +23,7 @@ public class Project {
         this.id = id;
     }
 
-    public Project(String id, String title, String description, String imageUrl, List<ProjectSkill> skills, List<Bid> bids, int budget, Date deadline, User winner) {
+    public Project(String id, String title, String description, String imageUrl, List<ProjectSkill> skills, List<Bid> bids, int budget, Date deadline,Date creationDate, User winner) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,6 +32,7 @@ public class Project {
         this.bids = bids;
         this.budget = budget;
         this.deadline = deadline;
+        this.creationDate = creationDate;
         this.winner = winner;
     }
 
@@ -104,5 +106,9 @@ public class Project {
 
     public void setWinner(User winner) {
         this.winner = winner;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
     }
 }
