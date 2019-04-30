@@ -24,22 +24,26 @@ public abstract class Repository<T, Id> {
     public List<T> findAll() throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         ResultSet rs = connection.prepareStatement(findAllQuery()).executeQuery();
-        return ResultSetToList(connection, rs);
+        List<T> result = resultSetToList(rs);
+        rs.close();
+        connection.close();
+        return result;
     }
 
     public List<T> findAllPaginated(int pageNumber, int pageSize, String orderBy) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         ResultSet rs = connection.prepareStatement(findAllPaginatedQuery(pageSize, pageNumber, orderBy)).executeQuery();
-        return ResultSetToList(connection, rs);
+        List<T> result = resultSetToList(rs);
+        rs.close();
+        connection.close();
+        return result;
     }
 
-    private List<T> ResultSetToList(Connection connection, ResultSet rs) throws SQLException {
+    protected List<T> resultSetToList(ResultSet rs) throws SQLException {
         List<T> result = new ArrayList<>();
         while (rs.next()) {
             result.add(toDomainModel(rs));
         }
-        rs.close();
-        connection.close();
         return result;
     }
 

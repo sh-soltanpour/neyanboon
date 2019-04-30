@@ -113,6 +113,11 @@ public class ProjectServiceImpl implements ProjectService {
         return findBid(user, project);
     }
 
+    @Override
+    public List<Project> search(String query) throws SQLException {
+        return projectRepository.findByTitleOrDescriptionContains(query);
+    }
+
 
     private Boolean findBid(User user, Project project) throws SQLException {
         return bidRepository.bidExists(project.getId(), user.getId());

@@ -1,6 +1,7 @@
 package services.project;
 
 import dtos.ProjectDto;
+import entitites.Project;
 import entitites.User;
 import exceptions.*;
 
@@ -24,4 +25,6 @@ public interface ProjectService {
             throws NotFoundException, AccessDeniedException, AlreadyExistsException, BadRequestException, SQLException;
 
     boolean bidRequested(String userId, String projectId) throws InternalErrorException, NotFoundException, SQLException;
+
+    List<Project> search(String query) throws SQLException;
 }

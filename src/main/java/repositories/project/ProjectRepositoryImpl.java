@@ -138,4 +138,14 @@ public class ProjectRepositoryImpl extends ProjectRepository {
         return "projects";
     }
 
+    @Override
+    public List<Project> findByTitleOrDescriptionContains(String query) throws SQLException {
+        String databaseQuery = String.format(
+                "select * from projects where title like '%%%s%%' or description like '%%%s%%' order by creationDate desc;",
+                query, query);
+        QueryExecResponse response = execQuery(databaseQuery);
+        List<Project> result = resultSetToList(response.getResultSet());
+        response.close();
+        return result;
+    }
 }
