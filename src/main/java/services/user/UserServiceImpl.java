@@ -126,6 +126,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> search(String query) throws SQLException {
+        return usersRepository.findByNameContains(query);
+    }
+
+    @Override
     public void addSkill(String skillName, User currentUser)
             throws NotFoundException, AlreadyExistsException, SQLException {
         ProjectSkill newSkill = findSkill(skillName);

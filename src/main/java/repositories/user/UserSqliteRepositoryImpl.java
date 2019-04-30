@@ -1,6 +1,7 @@
 package repositories.user;
 
 import configuration.DBCPDataSource;
+import entitites.Project;
 import entitites.User;
 import entitites.UserSkill;
 import org.sqlite.util.StringUtils;
@@ -165,6 +166,16 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     @Override
     protected String getTableName() {
         return "users";
+    }
+
+    @Override
+    public List<User> findByNameContains(String query) throws SQLException {
+        String databaseQuery = String.format("select * from users where firstName like '%%%s%%' or lastName like '%%%s%%'"
+                , query, query);
+        QueryExecResponse response = execQuery(databaseQuery);
+        List<User> result = resultSetToList(response.getResultSet());
+        response.close();
+        return result;
     }
 
     private String insertUserQuery(User user) {
