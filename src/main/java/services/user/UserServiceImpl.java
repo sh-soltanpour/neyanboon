@@ -2,6 +2,7 @@ package services.user;
 
 import dtos.UserDto;
 import entitites.ProjectSkill;
+import entitites.Skill;
 import entitites.User;
 import entitites.UserSkill;
 import exceptions.AlreadyExistsException;
@@ -133,19 +134,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addSkill(String skillName, User currentUser)
             throws NotFoundException, AlreadyExistsException, SQLException {
-        ProjectSkill newSkill = findSkill(skillName);
+        Skill newSkill = skillService.getSkill(skillName);
         currentUser.addSkill(newSkill.getName());
         usersRepository.save(currentUser);
     }
 
-    private ProjectSkill findSkill(String skillName) throws NotFoundException {
-        return skillService.getSkills()
-                .stream()
-                .filter(skillDto -> skillDto.getName().equals(skillName))
-                .findFirst()
-                .map(ProjectSkill::of)
-                .orElseThrow(NotFoundException::new);
-    }
 
     @Override
     public UserDto getUserDto(String userId) throws NotFoundException, InternalErrorException {

@@ -1,6 +1,7 @@
 package services.skill;
 
 import entitites.Skill;
+import exceptions.NotFoundException;
 import factory.ObjectFactory;
 import repositories.skill.SkillRepository;
 
@@ -35,5 +36,11 @@ public class SkillServiceImpl implements SkillService {
             e.printStackTrace();
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public Skill getSkill(String id) throws NotFoundException, SQLException {
+        return skillsRepository.findById(id);
+
     }
 }
