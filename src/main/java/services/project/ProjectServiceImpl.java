@@ -43,8 +43,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> getProjects() {
-        return Collections.emptyList();
+    public List<ProjectDto> getProjectsPaginated(int pageNumber, int pageSize) throws SQLException {
+        return projectRepository
+                .findAllPaginated(pageNumber, pageSize, "creationDate")
+                .stream()
+                .map(ProjectDto::of)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -124,8 +128,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     private boolean isQualified(User user, Project project) {
-        if (true)
-            return true;
         for (ProjectSkill requiredSkill : project.getSkills()) {
             UserSkill userSkill = user
                     .getSkills()

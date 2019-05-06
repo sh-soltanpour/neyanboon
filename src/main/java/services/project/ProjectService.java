@@ -11,7 +11,7 @@ import java.util.List;
 public interface ProjectService {
     void fetchProjects();
 
-    List<ProjectDto> getProjects();
+    public List<ProjectDto> getProjectsPaginated(int pageNumber, int pageSize) throws SQLException;
 
     ProjectDto getProject(String projectId) throws NotFoundException, SQLException;
 

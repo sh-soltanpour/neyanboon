@@ -30,8 +30,7 @@ public class ProjectListServlet extends BaseServlet {
                 pageNumber = Integer.valueOf(req.getParameter("pageNumber"));
             if (req.getParameter("pageSize") != null)
                 pageSize = Integer.valueOf(req.getParameter("pageSize"));
-            User user = userService.getCurrentUser();
-            List<ProjectDto> projects = projectService.getQualifiedProjectsPaginated(user, pageNumber, pageSize);
+            List<ProjectDto> projects = projectService.getProjectsPaginated(pageNumber, pageSize);
             returnJson(projects, resp);
         } catch (SQLException e) {
             e.printStackTrace();
