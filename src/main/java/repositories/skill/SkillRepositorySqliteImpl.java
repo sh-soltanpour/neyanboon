@@ -38,9 +38,15 @@ public class SkillRepositorySqliteImpl extends SkillRepository {
         return "skills";
     }
 
+    @Override
+    protected String primaryKey() {
+        return "name";
+    }
+
     private String insertQuery(Skill skill) {
         return String.format("replace into %s(%s) values('%s')", getTableName(),
                 StringUtils.join(columns, ","), skill.getName()
         );
     }
+
 }

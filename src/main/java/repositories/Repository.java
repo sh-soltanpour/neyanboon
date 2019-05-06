@@ -92,7 +92,11 @@ public abstract class Repository<T, Id> {
     }
 
     private String findByIdQuery(Id id) {
-        return String.format("SELECT * FROM %s where id = '%s'", getTableName(), id);
+        return String.format("SELECT * FROM %s where %s = '%s'", getTableName(), primaryKey(), id);
+    }
+
+    protected String primaryKey() {
+        return "id";
     }
 
     protected abstract String createTableQuery();

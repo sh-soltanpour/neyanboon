@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getOtherUsers() {
         try {
             return usersRepository.findAll().stream()
-                    .filter(user -> !user.getId().equals(currentUser.getId()))
+                    .filter(user -> !user.getId().equals(getCurrentUser().getId()))
                     .map(UserDto::of)
                     .collect(Collectors.toList());
         } catch (SQLException e) {
