@@ -148,7 +148,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getOtherUsers() {
         try {
-            return usersRepository.findAll().stream().map(UserDto::of).collect(Collectors.toList());
+            return usersRepository.findAll().stream()
+                    .filter(user -> !user.getId().equals(currentUser.getId()))
+                    .map(UserDto::of)
+                    .collect(Collectors.toList());
         } catch (SQLException e) {
             e.printStackTrace();
             return Collections.emptyList();
