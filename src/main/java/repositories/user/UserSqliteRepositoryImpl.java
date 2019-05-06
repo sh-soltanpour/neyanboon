@@ -1,13 +1,10 @@
 package repositories.user;
 
-import configuration.DBCPDataSource;
-import entitites.Project;
 import entitites.User;
 import entitites.UserSkill;
 import org.sqlite.util.StringUtils;
 import repositories.QueryExecResponse;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -31,7 +28,6 @@ public class UserSqliteRepositoryImpl extends UserRepository {
 
     @Override
     public void save(User user) throws SQLException {
-        //TODO: update user skills
         List<String> queries = new ArrayList<String>();
         queries.add(insertUserQuery(user));
         queries.addAll(updateUserSkillsQuery(user));
@@ -83,13 +79,13 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     @Override
     public User toDomainModel(ResultSet rs) throws SQLException {
         User user = new User(
-                rs.getString(1),
-                rs.getString(2),
-                rs.getString(3),
-                rs.getString(4),
-                rs.getString(5),
+                rs.getString("id"),
+                rs.getString("firstName"),
+                rs.getString("lastName"),
+                rs.getString("jobTitle"),
+                rs.getString("profilePictureUrl"),
                 Collections.emptyList(),
-                rs.getString(6)
+                rs.getString("bio")
         );
         user.setSkills(getUserSkills(user));
         return user;

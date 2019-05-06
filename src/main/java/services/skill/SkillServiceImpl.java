@@ -29,13 +29,9 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public List<Skill> getSkills() {
-        try {
-            return skillsRepository.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return Collections.emptyList();
-        }
+    public List<Skill> getSkills() throws SQLException {
+        return skillsRepository.findAll();
+
     }
 
     @Override
