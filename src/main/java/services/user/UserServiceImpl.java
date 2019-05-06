@@ -17,8 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserServiceImpl implements UserService {
-    private User currentUser;
-    private List<User> users = new ArrayList<>();
+
     private SkillService skillService = ObjectFactory.getSkillService();
     private UserRepository usersRepository = ObjectFactory.getUserRepository();
 
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
                 new UserSkill("C++"),
                 new UserSkill("Java")
         ));
-        currentUser = new User(
+        User currentUser = new User(
                 "1",
                 "علی",
                 "شریف زاده",
@@ -43,6 +42,7 @@ public class UserServiceImpl implements UserService {
                 skills,
                 "روی سنگ قبرم بنویسید: خدا بیامرز میخواست خیلی کارا بکنه ولی پول نداشت"
         );
+        List<User> users = new ArrayList<>();
         int idCounter = 2;
         for (int i = 0; i < 5; i++) {
             users.add(
@@ -79,7 +79,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getCurrentUser() {
-        return currentUser;
+        try {
+            return usersRepository.findById("1");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
