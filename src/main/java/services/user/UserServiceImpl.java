@@ -1,7 +1,6 @@
 package services.user;
 
 import dtos.UserDto;
-import entitites.ProjectSkill;
 import entitites.Skill;
 import entitites.User;
 import entitites.UserSkill;

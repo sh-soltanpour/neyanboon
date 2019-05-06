@@ -146,7 +146,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 "  skillId text,\n" +
                 "  constraint fk_user_skill\n" +
                 "                       foreign key (userId) references users(id),\n" +
-                "                       foreign key (skillId) references skills(id),\n" +
+                "                       foreign key (skillId) references skills(name),\n" +
                 "  UNIQUE(userId,skillId)\n" +
                 ");";
         String endorseTable = "create table if not exists endorse(\n" +
@@ -156,7 +156,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 "  constraint endorse_fk\n" +
                 "                    foreign key (endorser) references users(id),\n" +
                 "                    foreign key (endorsed) references users(id),\n" +
-                "                    foreign key (skillId) references skills(id),\n" +
+                "                    foreign key (skillId) references skills(name),\n" +
                 "                    unique (endorsed,endorsed,skillId)\n" +
                 "                    \n" +
                 ");";

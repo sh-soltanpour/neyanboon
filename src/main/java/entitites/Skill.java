@@ -1,24 +1,14 @@
 package entitites;
 
 public class Skill {
-    private String id;
     private String name;
 
 
-    public Skill(String id, String name) {
-        this.id = id;
+    public Skill(String name) {
         this.name = name;
     }
 
     public Skill() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

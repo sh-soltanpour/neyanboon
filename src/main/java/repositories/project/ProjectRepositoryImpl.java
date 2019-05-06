@@ -117,7 +117,7 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 "  point   int,\n" +
                 "  CONSTRAINT fk_project_skill\n" +
                 "    foreign key (projectId) references projects (id),\n" +
-                "  foreign key (skillId) references skills (id)\n" +
+                "  foreign key (skillId) references skills (name)\n" +
                 "  UNIQUE(projectId,skillId) " +
                 ");";
         String bid = "create table if not exists bid\n" +
