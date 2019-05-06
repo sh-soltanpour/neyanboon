@@ -1,13 +1,10 @@
 package repositories.project;
 
-import configuration.BasicConnectionPool;
-import configuration.DBCPDataSource;
 import entitites.Project;
 import entitites.ProjectSkill;
 import org.sqlite.util.StringUtils;
 import repositories.QueryExecResponse;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
