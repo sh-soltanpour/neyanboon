@@ -1,5 +1,6 @@
 package security;
 
 public interface TokenService {
-    public String generateToken(String id);
+    String generateToken(String id);
+    String parseToken(String token);
 }

@@ -2,6 +2,7 @@ package security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 
 public class JwtToken implements TokenService {
 
@@ -12,5 +13,11 @@ public class JwtToken implements TokenService {
                 .withIssuer("auth0")
                 .withClaim("id", id)
                 .sign(algorithm);
+    }
+
+    @Override
+    public String parseToken(String token) {
+        DecodedJWT jwt = JWT.decode(token);
+        return jwt.getClaim("id").asString();
     }
 }
