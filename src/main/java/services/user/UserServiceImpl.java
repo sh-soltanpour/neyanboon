@@ -9,9 +9,11 @@ import exceptions.InternalErrorException;
 import exceptions.NotFoundException;
 import exceptions.PreConditionFailedException;
 import factory.ObjectFactory;
+import org.apache.commons.codec.digest.DigestUtils;
 import repositories.user.UserRepository;
 import services.skill.SkillService;
 
+import java.security.MessageDigest;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
                 "1",
                 "علی",
                 "شریف زاده",
+                "ali1",
                 "برنامەنویس وب",
                 "https://storage.backtory.com/shahryar/oliver.jpg",
                 skills,
@@ -50,6 +53,7 @@ public class UserServiceImpl implements UserService {
                             String.valueOf(idCounter++),
                             "امیر",
                             "زاده",
+                            "amir1",
                             "برنامە وب",
                             "https://storage.backtory.com/shahryar/oliver.jpg",
                             skills.stream().map(userSkill -> new UserSkill(userSkill.getName()))
@@ -76,6 +80,14 @@ public class UserServiceImpl implements UserService {
             }
         });
     }
+
+    @Override
+    public void register(UserDto userDto) throws AlreadyExistsException {
+        User user = userDto.toUser();
+        user.setPassword(DigestUtils.sha256Hex(userDto.getPassword()));
+        usersRepository.register(user);
+    }
+
 
     @Override
     public User getCurrentUser() {

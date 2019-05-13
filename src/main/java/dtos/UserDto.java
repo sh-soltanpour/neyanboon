@@ -12,6 +12,7 @@ public class UserDto {
     private String id;
     private String firstName;
     private String lastName;
+    private String password;
     private String jobTitle;
     private String profilePictureUrl;
     private String bio;
@@ -20,10 +21,11 @@ public class UserDto {
     public UserDto() {
     }
 
-    private UserDto(String id, String firstName, String lastName, String jobTitle, String profilePictureUrl, String bio, List<UserSkillDto> skills) {
+    private UserDto(String id, String firstName, String lastName, String password, String jobTitle, String profilePictureUrl, String bio, List<UserSkillDto> skills) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.jobTitle = jobTitle;
         this.profilePictureUrl = profilePictureUrl;
         this.bio = bio;
@@ -35,6 +37,7 @@ public class UserDto {
                 user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
+                user.getPassword(),
                 user.getJobTitle(),
                 user.getProfilePictureUrl(),
                 user.getBio(),
@@ -47,6 +50,7 @@ public class UserDto {
                 id,
                 firstName,
                 lastName,
+                password,
                 jobTitle,
                 profilePictureUrl,
                 skills.stream().map(UserSkillDto::toUserSkill).collect(Collectors.toList()),
@@ -107,5 +111,13 @@ public class UserDto {
 
     public void setSkills(List<UserSkillDto> skills) {
         this.skills = skills;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

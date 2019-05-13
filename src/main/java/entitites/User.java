@@ -11,16 +11,18 @@ public class User {
     private String id;
     private String firstName;
     private String lastName;
+    private String password;
     private String jobTitle;
     private String profilePictureUrl;
     private String bio;
     private List<UserSkill> skills = new ArrayList<>();
 
 
-    public User(String id, String firstName, String lastName, String jobTitle, String profilePictureUrl, List<UserSkill> skills, String bio) {
+    public User(String id, String firstName, String lastName, String password, String jobTitle, String profilePictureUrl, List<UserSkill> skills, String bio) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.password = password;
         this.jobTitle = jobTitle;
         this.profilePictureUrl = profilePictureUrl;
         this.bio = bio;
@@ -128,5 +130,13 @@ public class User {
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Skill Not Found"))
                 .endorse(endorser);
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

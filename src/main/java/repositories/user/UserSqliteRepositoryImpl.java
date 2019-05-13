@@ -2,6 +2,7 @@ package repositories.user;
 
 import entitites.User;
 import entitites.UserSkill;
+import exceptions.AlreadyExistsException;
 import org.sqlite.util.StringUtils;
 import repositories.QueryExecResponse;
 
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 public class UserSqliteRepositoryImpl extends UserRepository {
 
     private final List<String> columns =
-            Arrays.asList("id", "firstName", "lastName", "jobTitle", "profilePictureUrl", "bio");
+            Arrays.asList("id", "firstName", "lastName", "password", "jobTitle", "profilePictureUrl", "bio");
 
 
     public UserSqliteRepositoryImpl() {
@@ -82,6 +83,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 rs.getString("id"),
                 rs.getString("firstName"),
                 rs.getString("lastName"),
+                rs.getString("password"),
                 rs.getString("jobTitle"),
                 rs.getString("profilePictureUrl"),
                 Collections.emptyList(),
@@ -130,6 +132,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 "  id                text primary key,\n" +
                 "  firstName         text,\n" +
                 "  lastName          text,\n" +
+                "  password          text,\n" +
                 "  jobTitle          text,\n" +
                 "  profilePictureUrl text,\n" +
                 "  bio               text\n" +
@@ -174,10 +177,22 @@ public class UserSqliteRepositoryImpl extends UserRepository {
         return result;
     }
 
+    @Override
+    public void register(User user) throws AlreadyExistsException {
+        String databaseQuery = insertUserQuery(user).replace("replace", "insert");
+        try {
+            execUpdateQuery(databaseQuery);
+        } catch (SQLException e) {
+            throw new AlreadyExistsException("user already exists");
+        }
+
+    }
+
     private String insertUserQuery(User user) {
-        return String.format("replace into %s(%s) values('%s','%s','%s','%s','%s','%s')", getTableName(),
+        return String.format("replace into %s(%s) values('%s','%s','%s','%s', '%s','%s','%s')", getTableName(),
                 StringUtils.join(columns, ","), user.getId(),
-                user.getFirstName(), user.getLastName(), user.getJobTitle(), user.getProfilePictureUrl(), user.getBio()
+                user.getFirstName(), user.getLastName(), user.getPassword(), user.getJobTitle(),
+                user.getProfilePictureUrl(), user.getBio()
         );
     }
 
