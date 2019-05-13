@@ -9,13 +9,11 @@ import services.user.UserService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @WebServlet(urlPatterns = {"/projects/*"})
@@ -31,7 +29,7 @@ public class ProjectServlet extends BaseServlet {
             ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
             returnJson(project, resp);
         } catch (AccessDeniedException e) {
-            returnError("Access Denied", HttpStatus.ACCESSDENIED, resp);
+            returnError("Access Denied", HttpStatus.FORBIDDEN, resp);
         } catch (NotFoundException e) {
             returnError("Not Found", HttpStatus.NOTFOUND, resp);
         } catch (SQLException e) {

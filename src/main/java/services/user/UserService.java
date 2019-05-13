@@ -2,10 +2,7 @@ package services.user;
 
 import dtos.UserDto;
 import entitites.User;
-import exceptions.AlreadyExistsException;
-import exceptions.InternalErrorException;
-import exceptions.NotFoundException;
-import exceptions.PreConditionFailedException;
+import exceptions.*;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -18,6 +15,8 @@ public interface UserService {
     User getCurrentUser();
 
     void register(UserDto userDto) throws AlreadyExistsException;
+
+    String login(String id, String password) throws SQLException, ForbiddenException;
 
     User getUser(String userId) throws NotFoundException, InternalErrorException;
 

@@ -4,13 +4,11 @@ import dtos.UserDto;
 import entitites.Skill;
 import entitites.User;
 import entitites.UserSkill;
-import exceptions.AlreadyExistsException;
-import exceptions.InternalErrorException;
-import exceptions.NotFoundException;
-import exceptions.PreConditionFailedException;
+import exceptions.*;
 import factory.ObjectFactory;
 import org.apache.commons.codec.digest.DigestUtils;
 import repositories.user.UserRepository;
+import security.TokenService;
 import services.skill.SkillService;
 
 import java.security.MessageDigest;
@@ -22,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
     private SkillService skillService = ObjectFactory.getSkillService();
     private UserRepository usersRepository = ObjectFactory.getUserRepository();
+    private TokenService tokenService = ObjectFactory.getTokenService();
 
     public UserServiceImpl() {
         initialize();
@@ -88,6 +87,18 @@ public class UserServiceImpl implements UserService {
         usersRepository.register(user);
     }
 
+    @Override
+    public String login(String id, String password) throws SQLException, ForbiddenException {
+        try {
+            User user = usersRepository.findById(id);
+            if (!DigestUtils.sha256Hex(password).equals(user.getPassword())) {
+                throw new ForbiddenException();
+            }
+            return tokenService.generateToken(user.getId());
+        } catch (NotFoundException e) {
+            throw new ForbiddenException();
+        }
+    }
 
     @Override
     public User getCurrentUser() {

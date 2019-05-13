@@ -30,7 +30,7 @@ public class BidServlet extends BaseServlet {
         } catch (NotFoundException e) {
             returnError("Project Not Found", HttpStatus.NOTFOUND, resp);
         } catch (AccessDeniedException e) {
-            returnError("Access Denied", HttpStatus.ACCESSDENIED, resp);
+            returnError("Access Denied", HttpStatus.FORBIDDEN, resp);
         } catch (AlreadyExistsException e) {
             returnError("Bid Already Exists", HttpStatus.CONFLICT, resp);
         } catch (BadRequestException e) {

@@ -17,7 +17,7 @@ abstract class BaseServlet extends HttpServlet {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     enum HttpStatus {
-        OK(200), NOTFOUND(404), ACCESSDENIED(403), CONFLICT(409), INTERNAL_SERVER(500),
+        OK(200), NOTFOUND(404), FORBIDDEN(403), CONFLICT(409), INTERNAL_SERVER(500),
         CREATED(201), BAD_REQUEST(400), PRECONDITION_FAILED(412);
 
 

@@ -12,6 +12,8 @@ import repositories.user.UserRepository;
 import repositories.user.UserSqliteRepositoryImpl;
 import repositories.bid.BidRepository;
 import repositories.bid.BidRepositoryImpl;
+import security.JwtToken;
+import security.TokenService;
 import services.project.ProjectService;
 import services.project.ProjectServiceImpl;
 import services.skill.SkillService;
@@ -25,6 +27,7 @@ public class ObjectFactory {
     private static UserService userService;
     private static MetaDataClient metaDataClient;
     private static SkillService skillService;
+    private static TokenService tokenService;
 
     //repositories
     private static UserRepository userRepository;
@@ -86,5 +89,11 @@ public class ObjectFactory {
         if (bidRepository == null)
             bidRepository = new BidRepositoryImpl();
         return bidRepository;
+    }
+
+    public static TokenService getTokenService() {
+        if (tokenService == null)
+            tokenService = new JwtToken();
+        return tokenService;
     }
 }
