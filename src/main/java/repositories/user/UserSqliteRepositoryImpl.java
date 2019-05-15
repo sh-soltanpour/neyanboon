@@ -6,6 +6,8 @@ import exceptions.AlreadyExistsException;
 import org.sqlite.util.StringUtils;
 import repositories.QueryExecResponse;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -179,13 +181,24 @@ public class UserSqliteRepositoryImpl extends UserRepository {
 
     @Override
     public void register(User user) throws AlreadyExistsException {
-        String databaseQuery = insertUserQuery(user).replace("replace", "insert");
+        String databaseQuery = String.format("insert into %s(%s) values(?,?,?,?,?,?,?)"
+                , getTableName(), StringUtils.join(columns, ","));
+        FunctionWithException<Connection, PreparedStatement, SQLException> statementCreator = (connection) -> {
+            PreparedStatement ps = connection.prepareStatement(databaseQuery);
+            ps.setString(1, user.getId());
+            ps.setString(2, user.getFirstName());
+            ps.setString(3, user.getLastName());
+            ps.setString(4, user.getPassword());
+            ps.setString(5, user.getJobTitle());
+            ps.setString(6, user.getProfilePictureUrl());
+            ps.setString(7, user.getBio());
+            return ps;
+        };
         try {
-            execUpdateQuery(databaseQuery);
+            execUpdateQuery2(statementCreator);
         } catch (SQLException e) {
             throw new AlreadyExistsException("user already exists");
         }
-
     }
 
     private String insertUserQuery(User user) {

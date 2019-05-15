@@ -3,12 +3,10 @@ package repositories;
 import configuration.DBCPDataSource;
 import exceptions.NotFoundException;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class Repository<T, Id> {
 
@@ -47,8 +45,19 @@ public abstract class Repository<T, Id> {
         return result;
     }
 
+    @FunctionalInterface
+    public interface FunctionWithException<T, R, E extends Exception> {
+        R apply(T t) throws E;
+    }
+
     public T findById(Id id) throws SQLException, NotFoundException {
-        QueryExecResponse response = execQuery(findByIdQuery(id));
+        FunctionWithException<Connection, PreparedStatement, SQLException> createStatement = (connection) -> {
+            PreparedStatement ps = connection.prepareStatement(findByIdQuery());
+            ps.setString(1, id.toString());
+            return ps;
+        };
+        QueryExecResponse response = execQuery2(createStatement);
+
         ResultSet resultSet = response.getResultSet();
         if (resultSet.isClosed())
             throw new NotFoundException();
@@ -67,9 +76,26 @@ public abstract class Repository<T, Id> {
         return QueryExecResponse.of(connection, rs);
     }
 
+    protected QueryExecResponse execQuery2(
+            FunctionWithException<Connection, PreparedStatement, SQLException> statementCreator) throws SQLException {
+        Connection connection = DBCPDataSource.getConnection();
+        ResultSet rs = statementCreator.apply(connection).executeQuery();
+//        ResultSet rs = connection.prepareStatement(query).executeQuery();
+        return QueryExecResponse.of(connection, rs);
+    }
+
     protected void execUpdateQuery(String query) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
         connection.prepareStatement(query).execute();
+        connection.close();
+    }
+
+    protected void execUpdateQuery2(
+            FunctionWithException<Connection, PreparedStatement, SQLException> statementCreator
+    ) throws SQLException {
+        Connection connection = DBCPDataSource.getConnection();
+        PreparedStatement ps = statementCreator.apply(connection);
+        ps.execute();
         connection.close();
     }
 
@@ -91,8 +117,8 @@ public abstract class Repository<T, Id> {
                 , getTableName(), orderBy, pageNumber * pageSize, pageSize);
     }
 
-    private String findByIdQuery(Id id) {
-        return String.format("SELECT * FROM %s where %s = '%s'", getTableName(), primaryKey(), id);
+    private String findByIdQuery() {
+        return String.format("SELECT * FROM %s where %s = ?", getTableName(), primaryKey());
     }
 
     protected String primaryKey() {
