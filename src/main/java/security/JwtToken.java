@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class JwtToken implements TokenService {
     private Algorithm algorithm = Algorithm.HMAC256("69D7a43t#V#KTkTEL$XMFRfGT#2bz+P*");
+
     @Override
     public String generateToken(String id) {
 
@@ -22,7 +23,10 @@ public class JwtToken implements TokenService {
 
     @Override
     public String parseToken(String token) {
-        //TODO: check token expiration
+        JWTVerifier verifier = JWT.require(algorithm)
+                .acceptExpiresAt(60)
+                .build();
+        verifier.verify(token);
         DecodedJWT jwt = JWT.decode(token);
         return jwt.getClaim("id").asString();
     }
