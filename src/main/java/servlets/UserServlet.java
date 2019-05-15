@@ -27,7 +27,7 @@ public class UserServlet extends BaseServlet {
         String userId = pathVariables.get(1);
         try {
             UserDto userDto = userService.getUserDto(userId);
-            Set<String> endorsedSkills = userService.getEndorsedList(userService.getCurrentUser().getId(), userDto.getId());
+            Set<String> endorsedSkills = userService.getEndorsedList(getCurrentUser(req).getId(), userDto.getId());
             userDto.getSkills().forEach(skill -> {
                 skill.setEndorsed(
                         endorsedSkills.contains(skill.getName())

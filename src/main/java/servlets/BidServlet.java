@@ -24,7 +24,7 @@ public class BidServlet extends BaseServlet {
         try {
             BidDto bidDto = parseBody(req, BidDto.class);
             projectService.addBidRequest(
-                    bidDto.getProject().getId(), userService.getCurrentUser(), bidDto.getBidAmount()
+                    bidDto.getProject().getId(), getCurrentUser(req), bidDto.getBidAmount()
             );
             returnJson(projectService.getProject(bidDto.getProject().getId()), resp);
         } catch (NotFoundException e) {
@@ -46,7 +46,7 @@ public class BidServlet extends BaseServlet {
         try {
             returnJson(
                     new BidRequestedResponse(
-                            projectService.bidRequested(userService.getCurrentUser().getId(), projectId)
+                            projectService.bidRequested(getCurrentUser(req).getId(), projectId)
                     ),
                     resp
             );

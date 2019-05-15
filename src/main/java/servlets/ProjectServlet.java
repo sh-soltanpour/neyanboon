@@ -19,14 +19,13 @@ import java.util.List;
 @WebServlet(urlPatterns = {"/projects/*"})
 public class ProjectServlet extends BaseServlet {
     private ProjectService projectService = ObjectFactory.getProjectService();
-    private UserService userService = ObjectFactory.getUserService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<String> pathVariables = Arrays.asList(req.getPathInfo().split("/"));
         String projectId = pathVariables.get(1);
         try {
-            ProjectDto project = projectService.getProject(userService.getCurrentUser(), projectId);
+            ProjectDto project = projectService.getProject(getCurrentUser(req), projectId);
             returnJson(project, resp);
         } catch (AccessDeniedException e) {
             returnError("Access Denied", HttpStatus.FORBIDDEN, resp);

@@ -12,8 +12,6 @@ import java.util.Set;
 public interface UserService {
     void initialize();
 
-    User getCurrentUser();
-
     void register(UserDto userDto) throws AlreadyExistsException;
 
     String login(String id, String password) throws SQLException, ForbiddenException;
@@ -22,13 +20,14 @@ public interface UserService {
 
     UserDto getUserDto(String userId) throws NotFoundException, InternalErrorException;
 
-    List<UserDto> getOtherUsers();
+    List<UserDto> getOtherUsers(User currentUser);
 
     void addSkill(String skillName, User currentUser) throws NotFoundException, AlreadyExistsException, SQLException;
 
     void deleteSkill(String skillName, User currentUser) throws NotFoundException, SQLException;
 
-    void endorse(UserDto endorsedDto, String skillName) throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException, SQLException;
+    void endorse(UserDto endorsedDto, String skillName, User currentUser)
+            throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException, SQLException;
 
     Set<String> getEndorsedList(String endorser, String endorsed) throws InternalErrorException;
 

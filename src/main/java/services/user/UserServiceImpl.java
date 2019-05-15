@@ -100,15 +100,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public User getCurrentUser() {
-        try {
-            return usersRepository.findById("1");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+
 
     @Override
     public User getUser(String userId) throws NotFoundException, InternalErrorException {
@@ -128,11 +120,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void endorse(UserDto endorsedDto, String skillName)
+    public void endorse(UserDto endorsedDto, String skillName, User currentUser)
             throws NotFoundException, PreConditionFailedException, AlreadyExistsException, InternalErrorException, SQLException {
         User endorsed = getUser(endorsedDto.getId());
-        User endorser = getCurrentUser();
-        endorsed.endorse(endorser, skillName);
+        endorsed.endorse(currentUser, skillName);
         usersRepository.save(endorsed);
     }
 
@@ -173,10 +164,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getOtherUsers() {
+    public List<UserDto> getOtherUsers(User currentUser) {
         try {
             return usersRepository.findAll().stream()
-                    .filter(user -> !user.getId().equals(getCurrentUser().getId()))
+                    .filter(user -> !user.getId().equals(currentUser.getId()))
                     .map(UserDto::of)
                     .collect(Collectors.toList());
         } catch (SQLException e) {

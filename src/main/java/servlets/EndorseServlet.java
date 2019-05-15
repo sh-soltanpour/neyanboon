@@ -28,12 +28,13 @@ public class EndorseServlet extends BaseServlet {
             EndorseRequest request = parseBody(req, EndorseRequest.class);
             userService.endorse(
                     request.getEndorsedUser(),
-                    request.getSkill().getName()
+                    request.getSkill().getName(),
+                    getCurrentUser(req)
             );
             List<UserSkillDto> userSkills = userService.getUser(request.getEndorsedUser().getId())
                     .getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList());
             Set<String> endorsedSkills = userService.getEndorsedList(
-                    userService.getCurrentUser().getId(),
+                    getCurrentUser(req).getId(),
                     request.getEndorsedUser().getId());
 
             userSkills.forEach(skill -> {

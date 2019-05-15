@@ -27,9 +27,9 @@ public class UserSkillServlet extends BaseServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String skillName = parseBody(req, ProjectSkillDto.class).getName();
-            userService.addSkill(skillName, userService.getCurrentUser());
+            userService.addSkill(skillName, getCurrentUser(req));
             returnJson(
-                    userService.getCurrentUser().getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
+                    getCurrentUser(req).getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
                     resp,
                     HttpStatus.CREATED);
         } catch (NotFoundException e) {
@@ -47,9 +47,9 @@ public class UserSkillServlet extends BaseServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String skillName = parseBody(req, ProjectSkill.class).getName();
-            userService.deleteSkill(skillName, userService.getCurrentUser());
+            userService.deleteSkill(skillName, getCurrentUser(req));
             returnJson(
-                    userService.getCurrentUser().getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
+                    getCurrentUser(req).getSkills().stream().map(UserSkillDto::of).collect(Collectors.toList()),
                     resp);
         } catch (NotFoundException e1) {
             returnError("Skill Not Found", HttpStatus.NOTFOUND, resp);
