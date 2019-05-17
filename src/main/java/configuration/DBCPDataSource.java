@@ -13,7 +13,7 @@ public class DBCPDataSource {
         ds.setUrl("jdbc:sqlite:./neyanboon.db");
 //        ds.setUsername("user");
 //        ds.setPassword("password");
-        ds.setMinIdle(10);
+        ds.setMinIdle(5);
         ds.setMaxIdle(50);
         ds.setMaxOpenPreparedStatements(100);
     }

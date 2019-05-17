@@ -12,7 +12,8 @@ import java.util.concurrent.TimeUnit;
 @WebListener
 public class AppContextListener implements ServletContextListener {
 
-    private ScheduledExecutorService scheduler;
+    private ScheduledExecutorService projectFetchSchedule;
+    private ScheduledExecutorService auctionSchedule;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try {
@@ -20,13 +21,20 @@ public class AppContextListener implements ServletContextListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(() ->
+        projectFetchSchedule = Executors.newSingleThreadScheduledExecutor();
+        projectFetchSchedule.scheduleAtFixedRate(() ->
                 ObjectFactory.getProjectService().fetchProjects(), 5, 5, TimeUnit.MINUTES);
+
+        auctionSchedule = Executors.newSingleThreadScheduledExecutor();
+        auctionSchedule.scheduleAtFixedRate(() ->
+                ObjectFactory.getProjectService().auction(), 0, 1, TimeUnit.MINUTES);
+
     }
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        scheduler.shutdownNow();
+
+        projectFetchSchedule.shutdownNow();
+        auctionSchedule.shutdownNow();
     }
 
 }

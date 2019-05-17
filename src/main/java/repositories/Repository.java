@@ -79,14 +79,17 @@ public abstract class Repository<T, Id> {
     protected QueryExecResponse execQuery2(
             FunctionWithException<Connection, PreparedStatement, SQLException> statementCreator) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
-        ResultSet rs = statementCreator.apply(connection).executeQuery();
+        PreparedStatement ps = statementCreator.apply(connection);
+        ResultSet rs = ps.executeQuery();
 //        ResultSet rs = connection.prepareStatement(query).executeQuery();
-        return QueryExecResponse.of(connection, rs);
+        return QueryExecResponse.of(connection, rs, ps);
     }
 
     protected void execUpdateQuery(String query) throws SQLException {
         Connection connection = DBCPDataSource.getConnection();
-        connection.prepareStatement(query).execute();
+        PreparedStatement ps = connection.prepareStatement(query);
+        ps.execute();
+        ps.close();
         connection.close();
     }
 
@@ -96,6 +99,7 @@ public abstract class Repository<T, Id> {
         Connection connection = DBCPDataSource.getConnection();
         PreparedStatement ps = statementCreator.apply(connection);
         ps.execute();
+        ps.close();
         connection.close();
     }
 
@@ -105,6 +109,7 @@ public abstract class Repository<T, Id> {
         for (String query : queries)
             statement.addBatch(query);
         statement.executeBatch();
+        statement.close();
         connection.close();
     }
 

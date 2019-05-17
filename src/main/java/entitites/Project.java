@@ -14,7 +14,9 @@ public class Project {
     private int budget;
     private Date deadline;
     private Date creationDate;
+    private boolean auctioned = false;
     private User winner;
+
 
     public Project() {
     }
@@ -23,7 +25,8 @@ public class Project {
         this.id = id;
     }
 
-    public Project(String id, String title, String description, String imageUrl, List<ProjectSkill> skills, List<Bid> bids, int budget, Date deadline,Date creationDate, User winner) {
+    public Project(String id, String title, String description, String imageUrl, List<ProjectSkill> skills,
+                   List<Bid> bids, int budget, Date deadline, Date creationDate, boolean auctioned, User winner) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,6 +37,7 @@ public class Project {
         this.deadline = deadline;
         this.creationDate = creationDate;
         this.winner = winner;
+        this.auctioned = auctioned;
     }
 
     public String getId() {
@@ -110,5 +114,13 @@ public class Project {
 
     public Date getCreationDate() {
         return creationDate;
+    }
+
+    public boolean isAuctioned() {
+        return auctioned;
+    }
+
+    public void setAuctioned(boolean auctioned) {
+        this.auctioned = auctioned;
     }
 }

@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
                 "1",
                 "علی",
                 "شریف زاده",
-                "ali1",
+                DigestUtils.sha256Hex("ali1"),
                 "برنامەنویس وب",
                 "https://storage.backtory.com/shahryar/oliver.jpg",
                 skills,

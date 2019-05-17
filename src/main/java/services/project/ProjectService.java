@@ -27,4 +27,6 @@ public interface ProjectService {
     boolean bidRequested(String userId, String projectId) throws InternalErrorException, NotFoundException, SQLException;
 
     List<Project> search(String query) throws SQLException;
+
+    void auction();
 }

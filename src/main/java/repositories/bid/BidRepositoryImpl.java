@@ -7,6 +7,7 @@ import repositories.QueryExecResponse;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class BidRepositoryImpl extends BidRepository {
     @Override
@@ -18,7 +19,7 @@ public class BidRepositoryImpl extends BidRepository {
     public Bid toDomainModel(ResultSet rs) throws SQLException {
         User user = new User(rs.getString("biddingUser"));
         Project project = new Project(rs.getString("projectId"));
-        return new Bid(user, project, rs.getInt("amount"));
+        return new Bid(user, project, rs.getInt("bidAmount"));
     }
 
     @Override
@@ -46,6 +47,15 @@ public class BidRepositoryImpl extends BidRepository {
                 userId, projectId);
         QueryExecResponse response = execQuery(query);
         boolean result = response.getResultSet().getBoolean("result");
+        response.close();
+        return result;
+    }
+
+    @Override
+    public List<Bid> findByProjectId(String id) throws SQLException {
+        String query = String.format("select * from %s where projectId = '%s'", getTableName(), id);
+        QueryExecResponse response = execQuery(query);
+        List<Bid> result = resultSetToList(response.getResultSet());
         response.close();
         return result;
     }

@@ -27,6 +27,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void fetchProjects() {
         System.out.println("Fetching projects started");
+        if(true)
+            return;
         List<Project> projects =
                 metaDataClient
                         .getProjects()
@@ -120,6 +122,50 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> search(String query) throws SQLException {
         return projectRepository.findByTitleOrDescriptionContains(query);
+    }
+
+    @Override
+    public void auction() {
+        System.out.println("performing auction");
+        try {
+            List<Project> projects = projectRepository.findByAuctionedAndDeadlineBefore(false, new Date());
+            for (Project project : projects) {
+                auctionForProject(project);
+                project.setAuctioned(true);
+                projectRepository.save(project);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void auctionForProject(Project project) throws SQLException {
+        List<Bid> bids = bidRepository.findByProjectId(project.getId());
+        if (bids.isEmpty())
+            return;
+        int maxBidValue = 0;
+        Bid winner = null;
+        for (Bid bid : bids) {
+            int bidValue = calculateBidValue(bid, project);
+            if (bidValue > maxBidValue) {
+                winner = bid;
+                maxBidValue = bidValue;
+            }
+        }
+        project.setWinner(winner.getBiddingUser());
+    }
+
+    private int calculateBidValue(Bid bid, Project project) {
+        int bidValue = 0;
+        User user = bid.getBiddingUser();
+        for (ProjectSkill projectSkill : project.getSkills()) {
+            int userSkillPoints = user.getSkillPoints(projectSkill.getName());
+            int projectSkillPoints = projectSkill.getPoint();
+            bidValue += Math.pow(userSkillPoints - projectSkillPoints, 2);
+        }
+        bidValue = (1000 * bidValue) + (project.getBudget() - bid.getBidAmount());
+        return bidValue;
     }
 
 

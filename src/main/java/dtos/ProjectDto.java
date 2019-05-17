@@ -18,6 +18,7 @@ public class ProjectDto {
     private Date creationDate;
     private String imageUrl;
     private String description;
+    private UserDto winner;
 
 
     public ProjectDto() {
@@ -34,11 +35,12 @@ public class ProjectDto {
                 project.getDeadline(),
                 project.getCreationDate(),
                 project.getImageUrl(),
-                project.getDescription()
+                project.getDescription(),
+                project.getWinner() == null ? null : UserDto.of(project.getWinner())
         );
     }
 
-    private ProjectDto(String id, String title, List<ProjectSkillDto> skills, int budget, Date deadline, Date creationDate, String imageUrl, String description) {
+    private ProjectDto(String id, String title, List<ProjectSkillDto> skills, int budget, Date deadline, Date creationDate, String imageUrl, String description, UserDto winner) {
         this.id = id;
         this.title = title;
         this.skills = skills;
@@ -47,6 +49,7 @@ public class ProjectDto {
         this.creationDate = creationDate;
         this.imageUrl = imageUrl;
         this.description = description;
+        this.winner = winner;
     }
 
     public Project toProject() {
@@ -60,6 +63,7 @@ public class ProjectDto {
                 budget,
                 deadline,
                 creationDate,
+                false,
                 null
         );
     }
@@ -122,5 +126,13 @@ public class ProjectDto {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public UserDto getWinner() {
+        return winner;
+    }
+
+    public void setWinner(UserDto winner) {
+        this.winner = winner;
     }
 }
