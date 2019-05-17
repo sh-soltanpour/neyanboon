@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/users/login")
+@WebServlet("/login")
 public class LoginServlet extends BaseServlet {
     private UserService userService = ObjectFactory.getUserService();
 

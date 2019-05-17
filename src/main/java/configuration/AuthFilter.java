@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter("/*")
+@WebFilter(filterName ="AuthFilter")
 public class AuthFilter implements Filter {
     private final String authHeader = "X-Auth-Token";
     private TokenService tokenService = ObjectFactory.getTokenService();
@@ -20,8 +20,12 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        if (httpServletRequest.getRequestURI().contains("/login") || httpServletRequest.getRequestURI().contains("/register"))
+        if(httpServletRequest.getMethod().equals("OPTIONS"))
+            return;
+        if (httpServletRequest.getRequestURI().contains("/login") || httpServletRequest.getRequestURI().contains("/register")) {
             chain.doFilter(request, response);
+            return;
+        }
         try {
             String token = httpServletRequest.getHeader(authHeader);
             if (token == null) {

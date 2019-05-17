@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/users/register")
+@WebServlet("/register")
 public class RegisterServlet extends BaseServlet {
 
     private UserService userService = ObjectFactory.getUserService();
