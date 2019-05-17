@@ -164,7 +164,7 @@ public class ProjectServiceImpl implements ProjectService {
             int projectSkillPoints = projectSkill.getPoint();
             bidValue += Math.pow(userSkillPoints - projectSkillPoints, 2);
         }
-        bidValue = (1000 * bidValue) + (project.getBudget() - bid.getBidAmount());
+        bidValue = (10000 * bidValue) + (project.getBudget() - bid.getBidAmount());
         return bidValue;
     }
 
