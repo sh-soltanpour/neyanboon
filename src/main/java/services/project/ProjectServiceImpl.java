@@ -27,8 +27,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void fetchProjects() {
         System.out.println("Fetching projects started");
-        if(true)
-            return;
         List<Project> projects =
                 metaDataClient
                         .getProjects()

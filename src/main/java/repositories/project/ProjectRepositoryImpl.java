@@ -83,10 +83,7 @@ public class ProjectRepositoryImpl extends ProjectRepository {
         project.setSkills(getProjectSkills(project));
         String winnerId = rs.getString("winner");
 
-
-        System.out.println("winnerId " + winnerId);
         if (!winnerId.equals("null")) {
-            System.out.println("not null");
             project.setWinner(getWinner(winnerId));
         }
         return project;

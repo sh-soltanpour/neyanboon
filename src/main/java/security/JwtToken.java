@@ -9,7 +9,7 @@ import utils.DateUtils;
 import java.util.Date;
 
 public class JwtToken implements TokenService {
-    private Algorithm algorithm = Algorithm.HMAC256("69D7a43t#V#KTkTEL$XMFRfGT#2bz+P*");
+    private Algorithm algorithm = Algorithm.HMAC256("joboonja");
 
     @Override
     public String generateToken(String id) {
@@ -18,6 +18,7 @@ public class JwtToken implements TokenService {
                 .withIssuer("neyanboon")
                 .withExpiresAt(DateUtils.addHours(new Date(), 1))
                 .withClaim("id", id)
+                .withIssuedAt(new Date())
                 .sign(algorithm);
     }
 

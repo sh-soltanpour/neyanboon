@@ -23,7 +23,7 @@ public class AppContextListener implements ServletContextListener {
         }
         projectFetchSchedule = Executors.newSingleThreadScheduledExecutor();
         projectFetchSchedule.scheduleAtFixedRate(() ->
-                ObjectFactory.getProjectService().fetchProjects(), 5, 5, TimeUnit.MINUTES);
+                ObjectFactory.getProjectService().fetchProjects(), 0, 5, TimeUnit.MINUTES);
 
         auctionSchedule = Executors.newSingleThreadScheduledExecutor();
         auctionSchedule.scheduleAtFixedRate(() ->

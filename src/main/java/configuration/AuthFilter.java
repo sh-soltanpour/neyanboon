@@ -27,7 +27,7 @@ public class AuthFilter implements Filter {
         try {
             String token = httpServletRequest.getHeader(authHeader);
             if (token == null) {
-                httpServletResponse.setStatus(403);
+                httpServletResponse.setStatus(401);
                 return;
             }
             String userId = tokenService.parseToken(token);
