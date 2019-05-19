@@ -38,18 +38,14 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     }
 
     private List<String> updateUserSkillsQuery(User user) {
-        String commaSeperatedSkills =
-                user.getSkills().stream().map(UserSkill::getName)
-                        .map(name -> String.format("'%s'", name))
-                        .collect(Collectors.joining(","));
-        String deleteSkills = String.format("delete from user_skill where userId = '%s' and skillId not in (%s)",
-                user.getId(), commaSeperatedSkills);
         List<String> queries = new ArrayList<>();
+        String deleteSkills = String.format("delete from user_skill where userId = '%s';",
+                user.getId());
         queries.add(deleteSkills);
         queries.addAll(
                 user.getSkills()
                         .stream()
-                        .map(userSkill -> String.format("replace into %s(%s) values('%s','%s')", "user_skill",
+                        .map(userSkill -> String.format("replace into %s(%s) values('%s','%s');", "user_skill",
                                 "skillId, userId", userSkill.getName(), user.getId())
                         ).collect(Collectors.toList())
         );
@@ -58,12 +54,8 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     }
 
     private List<String> updateEndorses(User user) {
-        String commaSeperatedSkills =
-                user.getSkills().stream().map(UserSkill::getName)
-                        .map(name -> String.format("'%s'", name))
-                        .collect(Collectors.joining(","));
-        String deleteEndorses = String.format("delete from endorse where endorsed = '%s' and skillId not in (%s)",
-                user.getId(), commaSeperatedSkills);
+        String deleteEndorses = String.format("delete from endorse where endorsed = '%s'",
+                user.getId());
         List<String> queries = new ArrayList<>();
         queries.add(deleteEndorses);
         queries.addAll(
@@ -81,18 +73,23 @@ public class UserSqliteRepositoryImpl extends UserRepository {
 
     @Override
     public User toDomainModel(ResultSet rs) throws SQLException {
-        User user = new User(
-                rs.getString("id"),
-                rs.getString("firstName"),
-                rs.getString("lastName"),
-                rs.getString("password"),
-                rs.getString("jobTitle"),
-                rs.getString("profilePictureUrl"),
-                Collections.emptyList(),
-                rs.getString("bio")
-        );
-        user.setSkills(getUserSkills(user));
-        return user;
+        try {
+            User user = new User(
+                    rs.getString("id"),
+                    rs.getString("firstName"),
+                    rs.getString("lastName"),
+                    rs.getString("password"),
+                    rs.getString("jobTitle"),
+                    rs.getString("profilePictureUrl"),
+                    Collections.emptyList(),
+                    rs.getString("bio")
+            );
+            user.setSkills(getUserSkills(user));
+            return user;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     private List<UserSkill> getUserSkills(User user) throws SQLException {
@@ -131,20 +128,20 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     protected String createTableQuery() {
         return "create table if not exists users\n" +
                 "(\n" +
-                "  id                text primary key,\n" +
-                "  firstName         text,\n" +
-                "  lastName          text,\n" +
-                "  password          text,\n" +
-                "  jobTitle          text,\n" +
-                "  profilePictureUrl text,\n" +
-                "  bio               text\n" +
+                "  id                VARCHAR(128) primary key,\n" +
+                "  firstName         VARCHAR(512),\n" +
+                "  lastName          VARCHAR(512),\n" +
+                "  password          VARCHAR(512),\n" +
+                "  jobTitle          VARCHAR(512),\n" +
+                "  profilePictureUrl VARCHAR(512),\n" +
+                "  bio               VARCHAR(512)\n" +
                 ");\n";
     }
 
     private List<String> createRelationTablesQuery() {
         String userSkillTable = "create table if not exists user_skill(\n" +
-                "  userId text,\n" +
-                "  skillId text,\n" +
+                "  userId VARCHAR(128),\n" +
+                "  skillId VARCHAR(128),\n" +
                 "  constraint fk_user_skill\n" +
                 "                       foreign key (userId) references users(id),\n" +
                 "                       foreign key (skillId) references skills(name),\n" +
@@ -152,13 +149,17 @@ public class UserSqliteRepositoryImpl extends UserRepository {
                 ");";
         String endorseTable = "create table if not exists endorse\n" +
                 "(\n" +
-                "  endorser text,\n" +
-                "  endorsed text,\n" +
-                "  skillId  text,\n" +
-                "  constraint endrose_pk\n" +
-                "    primary key (endorser, endorsed, skillId),\n" +
-                "  constraint endrose_skills_id_id_id_fk\n" +
-                "    foreign key (endorser, endorsed, skillId) references skills (id, id, id)\n" +
+                "\tendorser VARCHAR(128) not null,\n" +
+                "\tendorsed VARCHAR(128) not null,\n" +
+                "\tskillId VARCHAR(128) not null,\n" +
+                "\tconstraint endorse_pk\n" +
+                "\t\tprimary key (endorser, endorsed, skillId),\n" +
+                "\tconstraint endorse_skills_name_fk\n" +
+                "\t\tforeign key (skillId) references skills (name),\n" +
+                "\tconstraint endorse_users_id_id_fk\n" +
+                "\t\tforeign key (endorsed) references users (id),\n" +
+                "\t\tconstraint endorse_users_id_fk_2\n" +
+                "\t\tforeign key (endorser) references users (id)\n" +
                 ");";
         return Arrays.asList(userSkillTable, endorseTable);
     }
@@ -201,7 +202,7 @@ public class UserSqliteRepositoryImpl extends UserRepository {
     }
 
     private String insertUserQuery(User user) {
-        return String.format("replace into %s(%s) values('%s','%s','%s','%s', '%s','%s','%s')", getTableName(),
+        return String.format("insert ignore into %s(%s) values('%s','%s','%s','%s', '%s','%s','%s')", getTableName(),
                 StringUtils.join(columns, ","), user.getId(),
                 user.getFirstName(), user.getLastName(), user.getPassword(), user.getJobTitle(),
                 user.getProfilePictureUrl(), user.getBio()

@@ -17,7 +17,7 @@ public class AppContextListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try {
-            Class.forName("org.sqlite.JDBC");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
             e.printStackTrace();
         }

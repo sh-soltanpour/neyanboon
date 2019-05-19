@@ -29,7 +29,7 @@ public class SkillRepositorySqliteImpl extends SkillRepository {
     protected String createTableQuery() {
         String query = "create table if not exists %s\n" +
                 "(\n" +
-                "  name text primary key);";
+                "  name VARCHAR(128) primary key);";
         return String.format(query, getTableName());
     }
 
@@ -44,7 +44,7 @@ public class SkillRepositorySqliteImpl extends SkillRepository {
     }
 
     private String insertQuery(Skill skill) {
-        return String.format("replace into %s(%s) values('%s')", getTableName(),
+        return String.format("insert ignore into %s(%s) values('%s');", getTableName(),
                 StringUtils.join(columns, ","), skill.getName()
         );
     }

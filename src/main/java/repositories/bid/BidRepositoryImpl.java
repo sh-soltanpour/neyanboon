@@ -24,15 +24,23 @@ public class BidRepositoryImpl extends BidRepository {
 
     @Override
     protected String createTableQuery() {
-        return "create table if not exists bid\n" +
+        return "create table bid\n" +
                 "(\n" +
-                "  biddingUser text,\n" +
-                "  projectId   text,\n" +
-                "  bidAmount   int,\n" +
-                "  foreign key (biddingUser) references users (id),\n" +
-                "  foreign key (projectId) references projects (id),\n" +
-                "  unique (biddingUser, projectId)\n" +
-                ")";
+                "\tbiddingUser varchar(128) not null,\n" +
+                "\tprojectId varchar(128) not null,\n" +
+                "\tbidAmount int null,\n" +
+                "\tconstraint bid_projects_id_fk\n" +
+                "\t\tforeign key (projectId) references projects (id),\n" +
+                "\tconstraint bid_users_id_fk\n" +
+                "\t\tforeign key (biddingUser) references users (id)\n" +
+                ");\n";
+//        String uniqueIndex = "create unique index bid_biddingUser_projectId_uindex\n" +
+////                "\ton bid (biddingUser, projectId);\n" +
+////                "\n" +
+////                "alter table bid\n" +
+////                "\tadd constraint bid_pk\n" +
+////                "\t\tprimary key (biddingUser, projectId);\n" +
+////                "\n";
     }
 
     @Override
@@ -46,7 +54,9 @@ public class BidRepositoryImpl extends BidRepository {
                 "SELECT EXISTS(SELECT 1 FROM bid WHERE biddingUser = '%s' and projectId = '%s') as result;",
                 userId, projectId);
         QueryExecResponse response = execQuery(query);
-        boolean result = response.getResultSet().getBoolean("result");
+        ResultSet rs = response.getResultSet();
+        rs.next();
+        boolean result = rs.getBoolean("result");
         response.close();
         return result;
     }

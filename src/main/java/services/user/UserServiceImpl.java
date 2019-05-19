@@ -71,13 +71,13 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
             }
         }));
-        users.forEach(user -> {
-            try {
-                usersRepository.save(user);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
+//        users.forEach(user -> {
+//            try {
+//                usersRepository.save(user);
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        });
     }
 
     @Override

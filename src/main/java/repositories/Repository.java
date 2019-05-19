@@ -61,6 +61,7 @@ public abstract class Repository<T, Id> {
         ResultSet resultSet = response.getResultSet();
         if (resultSet.isClosed())
             throw new NotFoundException();
+        resultSet.next();
         T model = toDomainModel(resultSet);
         response.close();
         return model;

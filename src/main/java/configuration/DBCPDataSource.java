@@ -10,9 +10,9 @@ public class DBCPDataSource {
     private static BasicDataSource ds = new BasicDataSource();
 
     static {
-        ds.setUrl("jdbc:sqlite:./neyanboon.db");
-//        ds.setUsername("user");
-//        ds.setPassword("password");
+        ds.setUrl("jdbc:mysql://localhost:3307/neyanboon");
+        ds.setUsername("root");
+        ds.setPassword("root");
         ds.setMinIdle(5);
         ds.setMaxIdle(50);
         ds.setMaxOpenPreparedStatements(100);
