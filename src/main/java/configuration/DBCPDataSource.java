@@ -10,7 +10,7 @@ public class DBCPDataSource {
     private static BasicDataSource ds = new BasicDataSource();
 
     static {
-        ds.setUrl("jdbc:mysql://localhost:3307/neyanboon");
+        ds.setUrl("jdbc:mysql://mysql2:3306/neyanboon");
         ds.setUsername("root");
         ds.setPassword("root");
         ds.setMinIdle(5);
