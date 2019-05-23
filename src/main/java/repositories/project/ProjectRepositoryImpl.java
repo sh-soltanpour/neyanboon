@@ -145,19 +145,9 @@ public class ProjectRepositoryImpl extends ProjectRepository {
                 "\tconstraint project_skill_skills_name_fk\n" +
                 "\t\tforeign key (skillId) references skills (name)\n" +
                 ");";
-        String index = "alter table project_skill\n" +
-                "  add unique index project_skill_projectId_skillId_uindex (projectId, skillId)";
-        String bid = "create table if not exists bid\n" +
-                "(\n" +
-                "  id          VARCHAR(512) primary key,\n" +
-                "  biddingUser VARCHAR(512) ,\n" +
-                "  projectId   VARCHAR(512),\n" +
-                "  bidAmount   int,\n" +
-                "  constraint fk_bid\n" +
-                "  foreign key (biddingUser) references users(id),\n" +
-                "  foreign key (projectId) references projects(id)\n" +
-                ");";
-        return Arrays.asList(projectSkill, index, bid);
+//        String index = "alter table project_skill\n" +
+//                "  add unique index project_skill_projectId_skillId_uindex (projectId, skillId)";
+        return Arrays.asList(projectSkill);
     }
 
     @Override
