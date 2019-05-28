@@ -59,9 +59,10 @@ public abstract class Repository<T, Id> {
         QueryExecResponse response = execQuery2(createStatement);
 
         ResultSet resultSet = response.getResultSet();
-        if (resultSet.isClosed())
+
+        if (!resultSet.next())
             throw new NotFoundException();
-        resultSet.next();
+//        resultSet.next();
         T model = toDomainModel(resultSet);
         response.close();
         return model;
