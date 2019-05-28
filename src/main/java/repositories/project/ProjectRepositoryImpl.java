@@ -137,13 +137,15 @@ public class ProjectRepositoryImpl extends ProjectRepository {
     private List<String> createRelationTablesQuery() {
         String projectSkill = "create table if not exists project_skill\n" +
                 "(\n" +
-                "\tprojectId VARCHAR(128) null,\n" +
-                "\tskillId VARCHAR(128) null,\n" +
-                "\tpoint int null,\n" +
-                "\tconstraint project_skill_projects_id_fk\n" +
-                "\t\tforeign key (projectId) references projects (id),\n" +
-                "\tconstraint project_skill_skills_name_fk\n" +
-                "\t\tforeign key (skillId) references skills (name)\n" +
+                "    projectId varchar(128) not null,\n" +
+                "    skillId   varchar(128) not null ,\n" +
+                "    point     int          null,\n" +
+                "    constraint project_skill_projects_id_fk\n" +
+                "        foreign key (projectId) references projects (id),\n" +
+                "    constraint project_skill_skills_name_fk\n" +
+                "        foreign key (skillId) references skills (name),\n" +
+                "    constraint project_skill_pk\n" +
+                "        primary key (projectId, skillId)\n" +
                 ");";
 //        String index = "alter table project_skill\n" +
 //                "  add unique index project_skill_projectId_skillId_uindex (projectId, skillId)";
