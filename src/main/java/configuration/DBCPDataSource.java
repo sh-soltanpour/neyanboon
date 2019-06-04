@@ -19,11 +19,19 @@ public class DBCPDataSource {
     }
 
     public static Connection getConnection() throws SQLException {
+        while (true) {
+            try {
+                return ds.getConnection();
+            } catch (Exception e) {
+                sleep(3000);
+            }
+        }
+    }
+
+    private static void sleep(long ms) {
         try {
-            return ds.getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
         }
     }
 
