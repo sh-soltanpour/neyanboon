@@ -1,4 +1,4 @@
-FROM maven as builder
+FROM maven:3.6.1-jdk-8-alpine as builder
 COPY . .
 RUN mvn clean package
 
