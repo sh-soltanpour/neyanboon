@@ -23,6 +23,7 @@ public class DBCPDataSource {
             try {
                 return ds.getConnection();
             } catch (Exception e) {
+                System.out.println("Failed to get connection, retrying");
                 sleep(3000);
             }
         }
