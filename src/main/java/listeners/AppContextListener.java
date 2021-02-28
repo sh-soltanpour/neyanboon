@@ -21,13 +21,13 @@ public class AppContextListener implements ServletContextListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        projectFetchSchedule = Executors.newSingleThreadScheduledExecutor();
-        projectFetchSchedule.scheduleAtFixedRate(() ->
-                ObjectFactory.getProjectService().fetchProjects(), 0, 5, TimeUnit.MINUTES);
-
-        auctionSchedule = Executors.newSingleThreadScheduledExecutor();
-        auctionSchedule.scheduleAtFixedRate(() ->
-                ObjectFactory.getProjectService().auction(), 0, 1, TimeUnit.MINUTES);
+//        projectFetchSchedule = Executors.newSingleThreadScheduledExecutor();
+//        projectFetchSchedule.scheduleAtFixedRate(() ->
+//                ObjectFactory.getProjectService().fetchProjects(), 0, 5, TimeUnit.MINUTES);
+//
+//        auctionSchedule = Executors.newSingleThreadScheduledExecutor();
+//        auctionSchedule.scheduleAtFixedRate(() ->
+//                ObjectFactory.getProjectService().auction(), 0, 1, TimeUnit.MINUTES);
 
     }
 

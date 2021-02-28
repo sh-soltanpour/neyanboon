@@ -21,7 +21,7 @@ public class ProjectServiceImpl implements ProjectService {
     private BidRepository bidRepository = ObjectFactory.getBidRepository();
 
     public ProjectServiceImpl() {
-        fetchProjects();
+//        fetchProjects();
     }
 
     @Override

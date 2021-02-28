@@ -16,7 +16,7 @@ public class JwtToken implements TokenService {
 
         return JWT.create()
                 .withIssuer("neyanboon")
-                .withExpiresAt(DateUtils.addHours(new Date(), 1))
+                .withExpiresAt(DateUtils.addHours(new Date(), 10000000))
                 .withClaim("id", id)
                 .withIssuedAt(new Date())
                 .sign(algorithm);

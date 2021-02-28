@@ -13,7 +13,7 @@ public class SkillServiceImpl implements SkillService {
     private SkillRepository skillsRepository = ObjectFactory.getSkillRepository();
 
     public SkillServiceImpl() {
-        initialize();
+//        initialize();
     }
 
     @Override

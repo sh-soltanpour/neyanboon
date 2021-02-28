@@ -10,12 +10,12 @@ public class DBCPDataSource {
     private static BasicDataSource ds = new BasicDataSource();
 
     static {
-        ds.setUrl("jdbc:mysql://185.166.107.169:32731/neyanboon");
+        ds.setUrl("jdbc:mysql://database-service:3306/neyanboon");
         ds.setUsername("root");
         ds.setPassword("root");
-        ds.setMinIdle(5);
-        ds.setMaxIdle(50);
-        ds.setMaxOpenPreparedStatements(100);
+        ds.setMinIdle(50);
+        ds.setMaxIdle(500);
+        ds.setMaxOpenPreparedStatements(1000);
     }
 
     public static Connection getConnection() throws SQLException {
